@@ -4,40 +4,40 @@
  ******************************************************************************
  */
 const EXAMPLE_COMPONENTS = {
-    "input-error-state-matcher": {
-        "packagePath": "material/file-input/input-error-state-matcher",
-        "title": "Input with a custom ErrorStateMatcher",
-        "componentName": "InputErrorStateMatcherExample",
+    "file-input-error-state-matcher": {
+        "packagePath": "material/file-input/file-input-error-state-matcher",
+        "title": "File Input with a custom ErrorStateMatcher",
+        "componentName": "FileInputErrorStateMatcherExample",
         "files": [
-            "input-error-state-matcher-example.ts",
-            "./input-error-state-matcher-example.html",
-            "./input-error-state-matcher-example.css"
+            "file-input-error-state-matcher-example.ts",
+            "./file-input-error-state-matcher-example.html",
+            "./file-input-error-state-matcher-example.css"
         ],
-        "selector": "input-error-state-matcher-example",
+        "selector": "file-input-error-state-matcher-example",
         "additionalComponents": [],
-        "primaryFile": "input-error-state-matcher-example.ts",
+        "primaryFile": "file-input-error-state-matcher-example.ts",
         "importPath": "material/file-input"
     },
-    "input-overview": {
-        "packagePath": "material/file-input/input-overview",
-        "title": "Basic Inputs",
-        "componentName": "InputOverviewExample",
+    "file-input-overview": {
+        "packagePath": "material/file-input/file-input-overview",
+        "title": "Basic File Inputs",
+        "componentName": "FileInputOverviewExample",
         "files": [
-            "input-overview-example.ts",
-            "input-overview-example.html",
-            "input-overview-example.css"
+            "file-input-overview-example.ts",
+            "file-input-overview-example.html",
+            "file-input-overview-example.css"
         ],
-        "selector": "input-overview-example",
+        "selector": "file-input-overview-example",
         "additionalComponents": [],
-        "primaryFile": "input-overview-example.ts",
+        "primaryFile": "file-input-overview-example.ts",
         "importPath": "material/file-input"
     }
 };
 async function loadExample(id) {
     switch (id) {
-        case 'input-error-state-matcher':
+        case 'file-input-error-state-matcher':
             return import('@angular/components-examples/material/file-input');
-        case 'input-overview':
+        case 'file-input-overview':
             return import('@angular/components-examples/material/file-input');
         default:
             return undefined;

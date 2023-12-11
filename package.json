@@ -1,6 +1,6 @@
 {
   "name": "@angular/components-examples",
-  "version": "17.1.0-next.1+sha-c00e413-with-local-changes",
+  "version": "17.1.0-next.1+sha-0f8d0e0-with-local-changes",
   "description": "Angular Components Examples",
   "private": true,
   "repository": {
@@ -39,10 +39,10 @@
   },
   "homepage": "https://github.com/angular/components#readme",
   "peerDependencies": {
-    "@angular/common": "^17.0.0",
-    "@angular/core": "^17.0.0",
-    "@angular/cdk": "^17.0.1",
-    "@angular/material": "^17.0.1"
+    "@angular/cdk": "17.1.0-next.1+sha-0f8d0e0-with-local-changes",
+    "@angular/core": "^17.0.0-0 || ^17.1.0-0 || ^17.2.0-0 || ^17.3.0-0 || ^18.0.0-0",
+    "@angular/common": "^17.0.0-0 || ^17.1.0-0 || ^17.2.0-0 || ^17.3.0-0 || ^18.0.0-0",
+    "@angular/material": "17.1.0-next.1+sha-0f8d0e0-with-local-changes"
   },
   "dependencies": {
     "tslib": "^2.3.0"
