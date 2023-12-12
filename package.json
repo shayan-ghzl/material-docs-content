@@ -1,6 +1,6 @@
 {
   "name": "@angular/components-examples",
-  "version": "17.1.0-next.1+sha-0f8d0e0-with-local-changes",
+  "version": "17.1.0",
   "description": "Angular Components Examples",
   "private": true,
   "repository": {
