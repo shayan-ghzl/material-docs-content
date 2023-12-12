@@ -1,0 +1,16 @@
+import { Component } from '@angular/core';
+import { MatSliderModule } from '@angular/material/slider';
+import * as i0 from "@angular/core";
+import * as i1 from "@angular/material/slider";
+/**
+ * @title Basic slider
+ */
+export class SliderOverviewExample {
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: SliderOverviewExample, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.0.4", type: SliderOverviewExample, isStandalone: true, selector: "slider-overview-example", ngImport: i0, template: "<mat-slider>\r\n  <input matSliderThumb>\r\n</mat-slider>\r\n", styles: ["mat-slider {\r\n  width: 300px;\r\n}\r\n"], dependencies: [{ kind: "ngmodule", type: MatSliderModule }, { kind: "component", type: i1.MatSlider, selector: "mat-slider", inputs: ["disabled", "discrete", "showTickMarks", "min", "color", "disableRipple", "max", "step", "displayWith"], exportAs: ["matSlider"] }, { kind: "directive", type: i1.MatSliderThumb, selector: "input[matSliderThumb]", inputs: ["value"], outputs: ["valueChange", "dragStart", "dragEnd"], exportAs: ["matSliderThumb"] }] }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: SliderOverviewExample, decorators: [{
+            type: Component,
+            args: [{ selector: 'slider-overview-example', standalone: true, imports: [MatSliderModule], template: "<mat-slider>\r\n  <input matSliderThumb>\r\n</mat-slider>\r\n", styles: ["mat-slider {\r\n  width: 300px;\r\n}\r\n"] }]
+        }] });
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2xpZGVyLW92ZXJ2aWV3LWV4YW1wbGUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvY29tcG9uZW50cy1leGFtcGxlcy9tYXRlcmlhbC9zbGlkZXIvc2xpZGVyLW92ZXJ2aWV3L3NsaWRlci1vdmVydmlldy1leGFtcGxlLnRzIiwiLi4vLi4vLi4vLi4vLi4vLi4vLi4vLi4vc3JjL2NvbXBvbmVudHMtZXhhbXBsZXMvbWF0ZXJpYWwvc2xpZGVyL3NsaWRlci1vdmVydmlldy9zbGlkZXItb3ZlcnZpZXctZXhhbXBsZS5odG1sIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBQyxTQUFTLEVBQUMsTUFBTSxlQUFlLENBQUM7QUFDeEMsT0FBTyxFQUFDLGVBQWUsRUFBQyxNQUFNLDBCQUEwQixDQUFDOzs7QUFFekQ7O0dBRUc7QUFRSCxNQUFNLE9BQU8scUJBQXFCOzhHQUFyQixxQkFBcUI7a0dBQXJCLHFCQUFxQixtRkNibEMsK0RBR0EsaUdEUVksZUFBZTs7MkZBRWQscUJBQXFCO2tCQVBqQyxTQUFTOytCQUNFLHlCQUF5QixjQUd2QixJQUFJLFdBQ1AsQ0FBQyxlQUFlLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQge0NvbXBvbmVudH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XHJcbmltcG9ydCB7TWF0U2xpZGVyTW9kdWxlfSBmcm9tICdAYW5ndWxhci9tYXRlcmlhbC9zbGlkZXInO1xyXG5cclxuLyoqXHJcbiAqIEB0aXRsZSBCYXNpYyBzbGlkZXJcclxuICovXHJcbkBDb21wb25lbnQoe1xyXG4gIHNlbGVjdG9yOiAnc2xpZGVyLW92ZXJ2aWV3LWV4YW1wbGUnLFxyXG4gIHRlbXBsYXRlVXJsOiAnc2xpZGVyLW92ZXJ2aWV3LWV4YW1wbGUuaHRtbCcsXHJcbiAgc3R5bGVVcmxzOiBbJ3NsaWRlci1vdmVydmlldy1leGFtcGxlLmNzcyddLFxyXG4gIHN0YW5kYWxvbmU6IHRydWUsXHJcbiAgaW1wb3J0czogW01hdFNsaWRlck1vZHVsZV0sXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBTbGlkZXJPdmVydmlld0V4YW1wbGUge31cclxuIiwiPG1hdC1zbGlkZXI+XHJcbiAgPGlucHV0IG1hdFNsaWRlclRodW1iPlxyXG48L21hdC1zbGlkZXI+XHJcbiJdfQ==

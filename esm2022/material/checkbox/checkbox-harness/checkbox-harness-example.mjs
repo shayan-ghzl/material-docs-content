@@ -1,0 +1,19 @@
+import { Component } from '@angular/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import * as i0 from "@angular/core";
+import * as i1 from "@angular/material/checkbox";
+/**
+ * @title Testing with MatCheckboxHarness
+ */
+export class CheckboxHarnessExample {
+    constructor() {
+        this.disabled = true;
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: CheckboxHarnessExample, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.0.4", type: CheckboxHarnessExample, isStandalone: true, selector: "checkbox-harness-example", ngImport: i0, template: "<mat-checkbox\r\n    required\r\n    [checked]=\"true\"\r\n    name=\"first-name\"\r\n    value=\"first-value\"\r\n    aria-label=\"First checkbox\">\r\n  First\r\n</mat-checkbox>\r\n<mat-checkbox indeterminate=\"true\" [disabled]=\"disabled\" aria-label=\"Second checkbox\">\r\n  Second\r\n</mat-checkbox>\r\n", dependencies: [{ kind: "ngmodule", type: MatCheckboxModule }, { kind: "component", type: i1.MatCheckbox, selector: "mat-checkbox", inputs: ["aria-label", "aria-labelledby", "aria-describedby", "id", "required", "labelPosition", "name", "value", "disableRipple", "tabIndex", "color", "checked", "disabled", "indeterminate"], outputs: ["change", "indeterminateChange"], exportAs: ["matCheckbox"] }] }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: CheckboxHarnessExample, decorators: [{
+            type: Component,
+            args: [{ selector: 'checkbox-harness-example', standalone: true, imports: [MatCheckboxModule], template: "<mat-checkbox\r\n    required\r\n    [checked]=\"true\"\r\n    name=\"first-name\"\r\n    value=\"first-value\"\r\n    aria-label=\"First checkbox\">\r\n  First\r\n</mat-checkbox>\r\n<mat-checkbox indeterminate=\"true\" [disabled]=\"disabled\" aria-label=\"Second checkbox\">\r\n  Second\r\n</mat-checkbox>\r\n" }]
+        }] });
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2hlY2tib3gtaGFybmVzcy1leGFtcGxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vLi4vLi4vc3JjL2NvbXBvbmVudHMtZXhhbXBsZXMvbWF0ZXJpYWwvY2hlY2tib3gvY2hlY2tib3gtaGFybmVzcy9jaGVja2JveC1oYXJuZXNzLWV4YW1wbGUudHMiLCIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvY29tcG9uZW50cy1leGFtcGxlcy9tYXRlcmlhbC9jaGVja2JveC9jaGVja2JveC1oYXJuZXNzL2NoZWNrYm94LWhhcm5lc3MtZXhhbXBsZS5odG1sIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBQyxTQUFTLEVBQUMsTUFBTSxlQUFlLENBQUM7QUFDeEMsT0FBTyxFQUFDLGlCQUFpQixFQUFDLE1BQU0sNEJBQTRCLENBQUM7OztBQUU3RDs7R0FFRztBQU9ILE1BQU0sT0FBTyxzQkFBc0I7SUFObkM7UUFPRSxhQUFRLEdBQUcsSUFBSSxDQUFDO0tBQ2pCOzhHQUZZLHNCQUFzQjtrR0FBdEIsc0JBQXNCLG9GQ1puQyx3VEFXQSwyQ0REWSxpQkFBaUI7OzJGQUVoQixzQkFBc0I7a0JBTmxDLFNBQVM7K0JBQ0UsMEJBQTBCLGNBRXhCLElBQUksV0FDUCxDQUFDLGlCQUFpQixDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHtDb21wb25lbnR9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xyXG5pbXBvcnQge01hdENoZWNrYm94TW9kdWxlfSBmcm9tICdAYW5ndWxhci9tYXRlcmlhbC9jaGVja2JveCc7XHJcblxyXG4vKipcclxuICogQHRpdGxlIFRlc3Rpbmcgd2l0aCBNYXRDaGVja2JveEhhcm5lc3NcclxuICovXHJcbkBDb21wb25lbnQoe1xyXG4gIHNlbGVjdG9yOiAnY2hlY2tib3gtaGFybmVzcy1leGFtcGxlJyxcclxuICB0ZW1wbGF0ZVVybDogJ2NoZWNrYm94LWhhcm5lc3MtZXhhbXBsZS5odG1sJyxcclxuICBzdGFuZGFsb25lOiB0cnVlLFxyXG4gIGltcG9ydHM6IFtNYXRDaGVja2JveE1vZHVsZV0sXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBDaGVja2JveEhhcm5lc3NFeGFtcGxlIHtcclxuICBkaXNhYmxlZCA9IHRydWU7XHJcbn1cclxuIiwiPG1hdC1jaGVja2JveFxyXG4gICAgcmVxdWlyZWRcclxuICAgIFtjaGVja2VkXT1cInRydWVcIlxyXG4gICAgbmFtZT1cImZpcnN0LW5hbWVcIlxyXG4gICAgdmFsdWU9XCJmaXJzdC12YWx1ZVwiXHJcbiAgICBhcmlhLWxhYmVsPVwiRmlyc3QgY2hlY2tib3hcIj5cclxuICBGaXJzdFxyXG48L21hdC1jaGVja2JveD5cclxuPG1hdC1jaGVja2JveCBpbmRldGVybWluYXRlPVwidHJ1ZVwiIFtkaXNhYmxlZF09XCJkaXNhYmxlZFwiIGFyaWEtbGFiZWw9XCJTZWNvbmQgY2hlY2tib3hcIj5cclxuICBTZWNvbmRcclxuPC9tYXQtY2hlY2tib3g+XHJcbiJdfQ==

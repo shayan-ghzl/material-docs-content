@@ -1,0 +1,19 @@
+import { Component } from '@angular/core';
+import { MatListModule } from '@angular/material/list';
+import * as i0 from "@angular/core";
+import * as i1 from "@angular/material/list";
+/**
+ * @title List with selection
+ */
+export class ListSelectionExample {
+    constructor() {
+        this.typesOfShoes = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: ListSelectionExample, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "17.0.4", type: ListSelectionExample, isStandalone: true, selector: "list-selection-example", ngImport: i0, template: "<mat-selection-list #shoes>\r\n  @for (shoe of typesOfShoes; track shoe) {\r\n    <mat-list-option>{{shoe}}</mat-list-option>\r\n  }\r\n</mat-selection-list>\r\n\r\n<p>\r\n  Options selected: {{shoes.selectedOptions.selected.length}}\r\n</p>\r\n", dependencies: [{ kind: "ngmodule", type: MatListModule }, { kind: "component", type: i1.MatSelectionList, selector: "mat-selection-list", inputs: ["color", "compareWith", "multiple", "hideSingleSelectionIndicator", "disabled"], outputs: ["selectionChange"], exportAs: ["matSelectionList"] }, { kind: "component", type: i1.MatListOption, selector: "mat-list-option", inputs: ["togglePosition", "checkboxPosition", "color", "value", "selected"], outputs: ["selectedChange"], exportAs: ["matListOption"] }] }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: ListSelectionExample, decorators: [{
+            type: Component,
+            args: [{ selector: 'list-selection-example', standalone: true, imports: [MatListModule], template: "<mat-selection-list #shoes>\r\n  @for (shoe of typesOfShoes; track shoe) {\r\n    <mat-list-option>{{shoe}}</mat-list-option>\r\n  }\r\n</mat-selection-list>\r\n\r\n<p>\r\n  Options selected: {{shoes.selectedOptions.selected.length}}\r\n</p>\r\n" }]
+        }] });
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibGlzdC1zZWxlY3Rpb24tZXhhbXBsZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jb21wb25lbnRzLWV4YW1wbGVzL21hdGVyaWFsL2xpc3QvbGlzdC1zZWxlY3Rpb24vbGlzdC1zZWxlY3Rpb24tZXhhbXBsZS50cyIsIi4uLy4uLy4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jb21wb25lbnRzLWV4YW1wbGVzL21hdGVyaWFsL2xpc3QvbGlzdC1zZWxlY3Rpb24vbGlzdC1zZWxlY3Rpb24tZXhhbXBsZS5odG1sIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBQyxTQUFTLEVBQUMsTUFBTSxlQUFlLENBQUM7QUFDeEMsT0FBTyxFQUFDLGFBQWEsRUFBQyxNQUFNLHdCQUF3QixDQUFDOzs7QUFFckQ7O0dBRUc7QUFPSCxNQUFNLE9BQU8sb0JBQW9CO0lBTmpDO1FBT0UsaUJBQVksR0FBYSxDQUFDLE9BQU8sRUFBRSxPQUFPLEVBQUUsU0FBUyxFQUFFLFdBQVcsRUFBRSxVQUFVLENBQUMsQ0FBQztLQUNqRjs4R0FGWSxvQkFBb0I7a0dBQXBCLG9CQUFvQixrRkNaakMsdVBBU0EsMkNEQ1ksYUFBYTs7MkZBRVosb0JBQW9CO2tCQU5oQyxTQUFTOytCQUNFLHdCQUF3QixjQUV0QixJQUFJLFdBQ1AsQ0FBQyxhQUFhLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQge0NvbXBvbmVudH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XHJcbmltcG9ydCB7TWF0TGlzdE1vZHVsZX0gZnJvbSAnQGFuZ3VsYXIvbWF0ZXJpYWwvbGlzdCc7XHJcblxyXG4vKipcclxuICogQHRpdGxlIExpc3Qgd2l0aCBzZWxlY3Rpb25cclxuICovXHJcbkBDb21wb25lbnQoe1xyXG4gIHNlbGVjdG9yOiAnbGlzdC1zZWxlY3Rpb24tZXhhbXBsZScsXHJcbiAgdGVtcGxhdGVVcmw6ICdsaXN0LXNlbGVjdGlvbi1leGFtcGxlLmh0bWwnLFxyXG4gIHN0YW5kYWxvbmU6IHRydWUsXHJcbiAgaW1wb3J0czogW01hdExpc3RNb2R1bGVdLFxyXG59KVxyXG5leHBvcnQgY2xhc3MgTGlzdFNlbGVjdGlvbkV4YW1wbGUge1xyXG4gIHR5cGVzT2ZTaG9lczogc3RyaW5nW10gPSBbJ0Jvb3RzJywgJ0Nsb2dzJywgJ0xvYWZlcnMnLCAnTW9jY2FzaW5zJywgJ1NuZWFrZXJzJ107XHJcbn1cclxuIiwiPG1hdC1zZWxlY3Rpb24tbGlzdCAjc2hvZXM+XHJcbiAgQGZvciAoc2hvZSBvZiB0eXBlc09mU2hvZXM7IHRyYWNrIHNob2UpIHtcclxuICAgIDxtYXQtbGlzdC1vcHRpb24+e3tzaG9lfX08L21hdC1saXN0LW9wdGlvbj5cclxuICB9XHJcbjwvbWF0LXNlbGVjdGlvbi1saXN0PlxyXG5cclxuPHA+XHJcbiAgT3B0aW9ucyBzZWxlY3RlZDoge3tzaG9lcy5zZWxlY3RlZE9wdGlvbnMuc2VsZWN0ZWQubGVuZ3RofX1cclxuPC9wPlxyXG4iXX0=

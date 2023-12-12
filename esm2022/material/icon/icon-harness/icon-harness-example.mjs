@@ -1,0 +1,16 @@
+import { Component } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import * as i0 from "@angular/core";
+import * as i1 from "@angular/material/icon";
+/**
+ * @title Testing with MatIconHarness
+ */
+export class IconHarnessExample {
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: IconHarnessExample, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.0.4", type: IconHarnessExample, isStandalone: true, selector: "icon-harness-example", ngImport: i0, template: "<mat-icon fontSet=\"fontIcons\" fontIcon=\"fontIcon\"></mat-icon>\r\n<mat-icon svgIcon=\"svgIcons:svgIcon\"></mat-icon>\r\n<mat-icon inline>ligature_icon</mat-icon>\r\n<mat-icon fontIcon=\"ligature_icon_by_attribute\"></mat-icon>\r\n", dependencies: [{ kind: "ngmodule", type: MatIconModule }, { kind: "component", type: i1.MatIcon, selector: "mat-icon", inputs: ["color", "inline", "svgIcon", "fontSet", "fontIcon"], exportAs: ["matIcon"] }] }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: IconHarnessExample, decorators: [{
+            type: Component,
+            args: [{ selector: 'icon-harness-example', standalone: true, imports: [MatIconModule], template: "<mat-icon fontSet=\"fontIcons\" fontIcon=\"fontIcon\"></mat-icon>\r\n<mat-icon svgIcon=\"svgIcons:svgIcon\"></mat-icon>\r\n<mat-icon inline>ligature_icon</mat-icon>\r\n<mat-icon fontIcon=\"ligature_icon_by_attribute\"></mat-icon>\r\n" }]
+        }] });
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaWNvbi1oYXJuZXNzLWV4YW1wbGUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvY29tcG9uZW50cy1leGFtcGxlcy9tYXRlcmlhbC9pY29uL2ljb24taGFybmVzcy9pY29uLWhhcm5lc3MtZXhhbXBsZS50cyIsIi4uLy4uLy4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jb21wb25lbnRzLWV4YW1wbGVzL21hdGVyaWFsL2ljb24vaWNvbi1oYXJuZXNzL2ljb24taGFybmVzcy1leGFtcGxlLmh0bWwiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFDLFNBQVMsRUFBQyxNQUFNLGVBQWUsQ0FBQztBQUN4QyxPQUFPLEVBQUMsYUFBYSxFQUFDLE1BQU0sd0JBQXdCLENBQUM7OztBQUVyRDs7R0FFRztBQU9ILE1BQU0sT0FBTyxrQkFBa0I7OEdBQWxCLGtCQUFrQjtrR0FBbEIsa0JBQWtCLGdGQ1ovQiwyT0FJQSwyQ0RNWSxhQUFhOzsyRkFFWixrQkFBa0I7a0JBTjlCLFNBQVM7K0JBQ0Usc0JBQXNCLGNBRXBCLElBQUksV0FDUCxDQUFDLGFBQWEsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7Q29tcG9uZW50fSBmcm9tICdAYW5ndWxhci9jb3JlJztcclxuaW1wb3J0IHtNYXRJY29uTW9kdWxlfSBmcm9tICdAYW5ndWxhci9tYXRlcmlhbC9pY29uJztcclxuXHJcbi8qKlxyXG4gKiBAdGl0bGUgVGVzdGluZyB3aXRoIE1hdEljb25IYXJuZXNzXHJcbiAqL1xyXG5AQ29tcG9uZW50KHtcclxuICBzZWxlY3RvcjogJ2ljb24taGFybmVzcy1leGFtcGxlJyxcclxuICB0ZW1wbGF0ZVVybDogJ2ljb24taGFybmVzcy1leGFtcGxlLmh0bWwnLFxyXG4gIHN0YW5kYWxvbmU6IHRydWUsXHJcbiAgaW1wb3J0czogW01hdEljb25Nb2R1bGVdLFxyXG59KVxyXG5leHBvcnQgY2xhc3MgSWNvbkhhcm5lc3NFeGFtcGxlIHt9XHJcbiIsIjxtYXQtaWNvbiBmb250U2V0PVwiZm9udEljb25zXCIgZm9udEljb249XCJmb250SWNvblwiPjwvbWF0LWljb24+XHJcbjxtYXQtaWNvbiBzdmdJY29uPVwic3ZnSWNvbnM6c3ZnSWNvblwiPjwvbWF0LWljb24+XHJcbjxtYXQtaWNvbiBpbmxpbmU+bGlnYXR1cmVfaWNvbjwvbWF0LWljb24+XHJcbjxtYXQtaWNvbiBmb250SWNvbj1cImxpZ2F0dXJlX2ljb25fYnlfYXR0cmlidXRlXCI+PC9tYXQtaWNvbj5cclxuIl19

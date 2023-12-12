@@ -1,0 +1,52 @@
+import { Component, Injectable } from '@angular/core';
+import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
+import { DateRange, MAT_DATE_RANGE_SELECTION_STRATEGY, MatDatepickerModule, } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import * as i0 from "@angular/core";
+import * as i1 from "@angular/material/core";
+import * as i2 from "@angular/material/form-field";
+import * as i3 from "@angular/material/datepicker";
+export class FiveDayRangeSelectionStrategy {
+    constructor(_dateAdapter) {
+        this._dateAdapter = _dateAdapter;
+    }
+    selectionFinished(date) {
+        return this._createFiveDayRange(date);
+    }
+    createPreview(activeDate) {
+        return this._createFiveDayRange(activeDate);
+    }
+    _createFiveDayRange(date) {
+        if (date) {
+            const start = this._dateAdapter.addCalendarDays(date, -2);
+            const end = this._dateAdapter.addCalendarDays(date, 2);
+            return new DateRange(start, end);
+        }
+        return new DateRange(null, null);
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: FiveDayRangeSelectionStrategy, deps: [{ token: i1.DateAdapter }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: FiveDayRangeSelectionStrategy }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: FiveDayRangeSelectionStrategy, decorators: [{
+            type: Injectable
+        }], ctorParameters: () => [{ type: i1.DateAdapter }] });
+/** @title Date range picker with custom a selection strategy */
+export class DateRangePickerSelectionStrategyExample {
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: DateRangePickerSelectionStrategyExample, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.0.4", type: DateRangePickerSelectionStrategyExample, isStandalone: true, selector: "date-range-picker-selection-strategy-example", providers: [
+            {
+                provide: MAT_DATE_RANGE_SELECTION_STRATEGY,
+                useClass: FiveDayRangeSelectionStrategy,
+            },
+        ], ngImport: i0, template: "<mat-form-field>\r\n  <mat-label>Enter a date range</mat-label>\r\n  <mat-date-range-input [rangePicker]=\"picker\">\r\n    <input matStartDate placeholder=\"Start date\">\r\n    <input matEndDate placeholder=\"End date\">\r\n  </mat-date-range-input>\r\n  <mat-hint>MM/DD/YYYY \u2013 MM/DD/YYYY</mat-hint>\r\n  <mat-datepicker-toggle matIconSuffix [for]=\"picker\"></mat-datepicker-toggle>\r\n  <mat-date-range-picker #picker></mat-date-range-picker>\r\n</mat-form-field>\r\n", dependencies: [{ kind: "ngmodule", type: MatFormFieldModule }, { kind: "component", type: i2.MatFormField, selector: "mat-form-field", inputs: ["hideRequiredMarker", "color", "floatLabel", "appearance", "subscriptSizing", "hintLabel"], exportAs: ["matFormField"] }, { kind: "directive", type: i2.MatLabel, selector: "mat-label" }, { kind: "directive", type: i2.MatHint, selector: "mat-hint", inputs: ["align", "id"] }, { kind: "directive", type: i2.MatSuffix, selector: "[matSuffix], [matIconSuffix], [matTextSuffix]", inputs: ["matTextSuffix"] }, { kind: "ngmodule", type: MatDatepickerModule }, { kind: "component", type: i3.MatDatepickerToggle, selector: "mat-datepicker-toggle", inputs: ["for", "tabIndex", "aria-label", "disabled", "disableRipple"], exportAs: ["matDatepickerToggle"] }, { kind: "component", type: i3.MatDateRangeInput, selector: "mat-date-range-input", inputs: ["rangePicker", "required", "dateFilter", "min", "max", "disabled", "separator", "comparisonStart", "comparisonEnd"], exportAs: ["matDateRangeInput"] }, { kind: "directive", type: i3.MatStartDate, selector: "input[matStartDate]", outputs: ["dateChange", "dateInput"] }, { kind: "directive", type: i3.MatEndDate, selector: "input[matEndDate]", outputs: ["dateChange", "dateInput"] }, { kind: "component", type: i3.MatDateRangePicker, selector: "mat-date-range-picker", exportAs: ["matDateRangePicker"] }, { kind: "ngmodule", type: MatNativeDateModule }] }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: DateRangePickerSelectionStrategyExample, decorators: [{
+            type: Component,
+            args: [{ selector: 'date-range-picker-selection-strategy-example', providers: [
+                        {
+                            provide: MAT_DATE_RANGE_SELECTION_STRATEGY,
+                            useClass: FiveDayRangeSelectionStrategy,
+                        },
+                    ], standalone: true, imports: [MatFormFieldModule, MatDatepickerModule, MatNativeDateModule], template: "<mat-form-field>\r\n  <mat-label>Enter a date range</mat-label>\r\n  <mat-date-range-input [rangePicker]=\"picker\">\r\n    <input matStartDate placeholder=\"Start date\">\r\n    <input matEndDate placeholder=\"End date\">\r\n  </mat-date-range-input>\r\n  <mat-hint>MM/DD/YYYY \u2013 MM/DD/YYYY</mat-hint>\r\n  <mat-datepicker-toggle matIconSuffix [for]=\"picker\"></mat-datepicker-toggle>\r\n  <mat-date-range-picker #picker></mat-date-range-picker>\r\n</mat-form-field>\r\n" }]
+        }] });
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGF0ZS1yYW5nZS1waWNrZXItc2VsZWN0aW9uLXN0cmF0ZWd5LWV4YW1wbGUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvY29tcG9uZW50cy1leGFtcGxlcy9tYXRlcmlhbC9kYXRlcGlja2VyL2RhdGUtcmFuZ2UtcGlja2VyLXNlbGVjdGlvbi1zdHJhdGVneS9kYXRlLXJhbmdlLXBpY2tlci1zZWxlY3Rpb24tc3RyYXRlZ3ktZXhhbXBsZS50cyIsIi4uLy4uLy4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jb21wb25lbnRzLWV4YW1wbGVzL21hdGVyaWFsL2RhdGVwaWNrZXIvZGF0ZS1yYW5nZS1waWNrZXItc2VsZWN0aW9uLXN0cmF0ZWd5L2RhdGUtcmFuZ2UtcGlja2VyLXNlbGVjdGlvbi1zdHJhdGVneS1leGFtcGxlLmh0bWwiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFDLFNBQVMsRUFBRSxVQUFVLEVBQUMsTUFBTSxlQUFlLENBQUM7QUFDcEQsT0FBTyxFQUFDLFdBQVcsRUFBRSxtQkFBbUIsRUFBQyxNQUFNLHdCQUF3QixDQUFDO0FBQ3hFLE9BQU8sRUFFTCxTQUFTLEVBQ1QsaUNBQWlDLEVBQ2pDLG1CQUFtQixHQUNwQixNQUFNLDhCQUE4QixDQUFDO0FBQ3RDLE9BQU8sRUFBQyxrQkFBa0IsRUFBQyxNQUFNLDhCQUE4QixDQUFDOzs7OztBQUdoRSxNQUFNLE9BQU8sNkJBQTZCO0lBQ3hDLFlBQW9CLFlBQTRCO1FBQTVCLGlCQUFZLEdBQVosWUFBWSxDQUFnQjtJQUFHLENBQUM7SUFFcEQsaUJBQWlCLENBQUMsSUFBYztRQUM5QixPQUFPLElBQUksQ0FBQyxtQkFBbUIsQ0FBQyxJQUFJLENBQUMsQ0FBQztJQUN4QyxDQUFDO0lBRUQsYUFBYSxDQUFDLFVBQW9CO1FBQ2hDLE9BQU8sSUFBSSxDQUFDLG1CQUFtQixDQUFDLFVBQVUsQ0FBQyxDQUFDO0lBQzlDLENBQUM7SUFFTyxtQkFBbUIsQ0FBQyxJQUFjO1FBQ3hDLElBQUksSUFBSSxFQUFFO1lBQ1IsTUFBTSxLQUFLLEdBQUcsSUFBSSxDQUFDLFlBQVksQ0FBQyxlQUFlLENBQUMsSUFBSSxFQUFFLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFDMUQsTUFBTSxHQUFHLEdBQUcsSUFBSSxDQUFDLFlBQVksQ0FBQyxlQUFlLENBQUMsSUFBSSxFQUFFLENBQUMsQ0FBQyxDQUFDO1lBQ3ZELE9BQU8sSUFBSSxTQUFTLENBQUksS0FBSyxFQUFFLEdBQUcsQ0FBQyxDQUFDO1NBQ3JDO1FBRUQsT0FBTyxJQUFJLFNBQVMsQ0FBSSxJQUFJLEVBQUUsSUFBSSxDQUFDLENBQUM7SUFDdEMsQ0FBQzs4R0FuQlUsNkJBQTZCO2tIQUE3Qiw2QkFBNkI7OzJGQUE3Qiw2QkFBNkI7a0JBRHpDLFVBQVU7O0FBdUJYLGdFQUFnRTtBQWFoRSxNQUFNLE9BQU8sdUNBQXVDOzhHQUF2Qyx1Q0FBdUM7a0dBQXZDLHVDQUF1QywyRkFUdkM7WUFDVDtnQkFDRSxPQUFPLEVBQUUsaUNBQWlDO2dCQUMxQyxRQUFRLEVBQUUsNkJBQTZCO2FBQ3hDO1NBQ0YsMEJDMUNILDhkQVVBLDJDRGtDWSxrQkFBa0IsbWdCQUFFLG1CQUFtQixvekJBQUUsbUJBQW1COzsyRkFFM0QsdUNBQXVDO2tCQVpuRCxTQUFTOytCQUNFLDhDQUE4QyxhQUU3Qzt3QkFDVDs0QkFDRSxPQUFPLEVBQUUsaUNBQWlDOzRCQUMxQyxRQUFRLEVBQUUsNkJBQTZCO3lCQUN4QztxQkFDRixjQUNXLElBQUksV0FDUCxDQUFDLGtCQUFrQixFQUFFLG1CQUFtQixFQUFFLG1CQUFtQixDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHtDb21wb25lbnQsIEluamVjdGFibGV9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xyXG5pbXBvcnQge0RhdGVBZGFwdGVyLCBNYXROYXRpdmVEYXRlTW9kdWxlfSBmcm9tICdAYW5ndWxhci9tYXRlcmlhbC9jb3JlJztcclxuaW1wb3J0IHtcclxuICBNYXREYXRlUmFuZ2VTZWxlY3Rpb25TdHJhdGVneSxcclxuICBEYXRlUmFuZ2UsXHJcbiAgTUFUX0RBVEVfUkFOR0VfU0VMRUNUSU9OX1NUUkFURUdZLFxyXG4gIE1hdERhdGVwaWNrZXJNb2R1bGUsXHJcbn0gZnJvbSAnQGFuZ3VsYXIvbWF0ZXJpYWwvZGF0ZXBpY2tlcic7XHJcbmltcG9ydCB7TWF0Rm9ybUZpZWxkTW9kdWxlfSBmcm9tICdAYW5ndWxhci9tYXRlcmlhbC9mb3JtLWZpZWxkJztcclxuXHJcbkBJbmplY3RhYmxlKClcclxuZXhwb3J0IGNsYXNzIEZpdmVEYXlSYW5nZVNlbGVjdGlvblN0cmF0ZWd5PEQ+IGltcGxlbWVudHMgTWF0RGF0ZVJhbmdlU2VsZWN0aW9uU3RyYXRlZ3k8RD4ge1xyXG4gIGNvbnN0cnVjdG9yKHByaXZhdGUgX2RhdGVBZGFwdGVyOiBEYXRlQWRhcHRlcjxEPikge31cclxuXHJcbiAgc2VsZWN0aW9uRmluaXNoZWQoZGF0ZTogRCB8IG51bGwpOiBEYXRlUmFuZ2U8RD4ge1xyXG4gICAgcmV0dXJuIHRoaXMuX2NyZWF0ZUZpdmVEYXlSYW5nZShkYXRlKTtcclxuICB9XHJcblxyXG4gIGNyZWF0ZVByZXZpZXcoYWN0aXZlRGF0ZTogRCB8IG51bGwpOiBEYXRlUmFuZ2U8RD4ge1xyXG4gICAgcmV0dXJuIHRoaXMuX2NyZWF0ZUZpdmVEYXlSYW5nZShhY3RpdmVEYXRlKTtcclxuICB9XHJcblxyXG4gIHByaXZhdGUgX2NyZWF0ZUZpdmVEYXlSYW5nZShkYXRlOiBEIHwgbnVsbCk6IERhdGVSYW5nZTxEPiB7XHJcbiAgICBpZiAoZGF0ZSkge1xyXG4gICAgICBjb25zdCBzdGFydCA9IHRoaXMuX2RhdGVBZGFwdGVyLmFkZENhbGVuZGFyRGF5cyhkYXRlLCAtMik7XHJcbiAgICAgIGNvbnN0IGVuZCA9IHRoaXMuX2RhdGVBZGFwdGVyLmFkZENhbGVuZGFyRGF5cyhkYXRlLCAyKTtcclxuICAgICAgcmV0dXJuIG5ldyBEYXRlUmFuZ2U8RD4oc3RhcnQsIGVuZCk7XHJcbiAgICB9XHJcblxyXG4gICAgcmV0dXJuIG5ldyBEYXRlUmFuZ2U8RD4obnVsbCwgbnVsbCk7XHJcbiAgfVxyXG59XHJcblxyXG4vKiogQHRpdGxlIERhdGUgcmFuZ2UgcGlja2VyIHdpdGggY3VzdG9tIGEgc2VsZWN0aW9uIHN0cmF0ZWd5ICovXHJcbkBDb21wb25lbnQoe1xyXG4gIHNlbGVjdG9yOiAnZGF0ZS1yYW5nZS1waWNrZXItc2VsZWN0aW9uLXN0cmF0ZWd5LWV4YW1wbGUnLFxyXG4gIHRlbXBsYXRlVXJsOiAnZGF0ZS1yYW5nZS1waWNrZXItc2VsZWN0aW9uLXN0cmF0ZWd5LWV4YW1wbGUuaHRtbCcsXHJcbiAgcHJvdmlkZXJzOiBbXHJcbiAgICB7XHJcbiAgICAgIHByb3ZpZGU6IE1BVF9EQVRFX1JBTkdFX1NFTEVDVElPTl9TVFJBVEVHWSxcclxuICAgICAgdXNlQ2xhc3M6IEZpdmVEYXlSYW5nZVNlbGVjdGlvblN0cmF0ZWd5LFxyXG4gICAgfSxcclxuICBdLFxyXG4gIHN0YW5kYWxvbmU6IHRydWUsXHJcbiAgaW1wb3J0czogW01hdEZvcm1GaWVsZE1vZHVsZSwgTWF0RGF0ZXBpY2tlck1vZHVsZSwgTWF0TmF0aXZlRGF0ZU1vZHVsZV0sXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBEYXRlUmFuZ2VQaWNrZXJTZWxlY3Rpb25TdHJhdGVneUV4YW1wbGUge31cclxuIiwiPG1hdC1mb3JtLWZpZWxkPlxyXG4gIDxtYXQtbGFiZWw+RW50ZXIgYSBkYXRlIHJhbmdlPC9tYXQtbGFiZWw+XHJcbiAgPG1hdC1kYXRlLXJhbmdlLWlucHV0IFtyYW5nZVBpY2tlcl09XCJwaWNrZXJcIj5cclxuICAgIDxpbnB1dCBtYXRTdGFydERhdGUgcGxhY2Vob2xkZXI9XCJTdGFydCBkYXRlXCI+XHJcbiAgICA8aW5wdXQgbWF0RW5kRGF0ZSBwbGFjZWhvbGRlcj1cIkVuZCBkYXRlXCI+XHJcbiAgPC9tYXQtZGF0ZS1yYW5nZS1pbnB1dD5cclxuICA8bWF0LWhpbnQ+TU0vREQvWVlZWSDigJMgTU0vREQvWVlZWTwvbWF0LWhpbnQ+XHJcbiAgPG1hdC1kYXRlcGlja2VyLXRvZ2dsZSBtYXRJY29uU3VmZml4IFtmb3JdPVwicGlja2VyXCI+PC9tYXQtZGF0ZXBpY2tlci10b2dnbGU+XHJcbiAgPG1hdC1kYXRlLXJhbmdlLXBpY2tlciAjcGlja2VyPjwvbWF0LWRhdGUtcmFuZ2UtcGlja2VyPlxyXG48L21hdC1mb3JtLWZpZWxkPlxyXG4iXX0=
