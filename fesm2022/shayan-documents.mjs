@@ -20,7 +20,7 @@ const EXAMPLE_COMPONENTS = {
     },
     "file-input-overview": {
         "packagePath": "material/file-input/file-input-overview",
-        "title": "Basic File Inputs",
+        "title": "Basic File Input",
         "componentName": "FileInputOverviewExample",
         "files": [
             "file-input-overview-example.ts",
@@ -36,9 +36,9 @@ const EXAMPLE_COMPONENTS = {
 async function loadExample(id) {
     switch (id) {
         case 'file-input-error-state-matcher':
-            return import('@angular/components-examples/material/file-input');
+            return import('@angular/shayan-documents/material/file-input');
         case 'file-input-overview':
-            return import('@angular/components-examples/material/file-input');
+            return import('@angular/shayan-documents/material/file-input');
         default:
             return undefined;
     }
@@ -69,4 +69,4 @@ class ExampleData {
  */
 
 export { EXAMPLE_COMPONENTS, ExampleData, loadExample };
-//# sourceMappingURL=components-examples.mjs.map
+//# sourceMappingURL=shayan-documents.mjs.map

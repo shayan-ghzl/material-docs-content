@@ -13,7 +13,7 @@ export declare class FileInputErrorStateMatcherExample {
 }
 
 /**
- * @title Basic File Inputs
+ * @title Basic File Input
  */
 export declare class FileInputOverviewExample {
     static ɵfac: i0.ɵɵFactoryDeclaration<FileInputOverviewExample, never>;

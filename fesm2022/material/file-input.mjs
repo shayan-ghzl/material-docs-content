@@ -9,30 +9,30 @@ import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 /** Coerces a data-bound value (typically a string) to a boolean. */
-function coerceBooleanProperty(value) {
+function coerceBooleanProperty$1(value) {
     return value != null && `${value}` !== 'false';
 }
 
-function coerceNumberProperty(value, fallbackValue = 0) {
-    return _isNumberValue(value) ? Number(value) : fallbackValue;
+function coerceNumberProperty$1(value, fallbackValue = 0) {
+    return _isNumberValue$1(value) ? Number(value) : fallbackValue;
 }
 /**
  * Whether the provided value is considered a number.
  * @docs-private
  */
-function _isNumberValue(value) {
+function _isNumberValue$1(value) {
     // parseFloat(value) handles most of the cases we're interested in (it treats null, empty string,
     // and other non-number values as NaN, where Number just uses 0) but it considers the string
     // '123hello' to be a valid number. Therefore we also check if Number(value) is NaN.
     return !isNaN(parseFloat(value)) && !isNaN(Number(value));
 }
 
-function coerceArray(value) {
+function coerceArray$1(value) {
     return Array.isArray(value) ? value : [value];
 }
 
 /** Coerces a value to a CSS pixel value. */
-function coerceCssPixelValue(value) {
+function coerceCssPixelValue$1(value) {
     if (value == null) {
         return '';
     }
@@ -43,7 +43,7 @@ function coerceCssPixelValue(value) {
  * Coerces an ElementRef or an Element into an element.
  * Useful for APIs that can accept either a ref or the native element itself.
  */
-function coerceElement(elementOrRef) {
+function coerceElement$1(elementOrRef) {
     return elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
 }
 
@@ -64,7 +64,7 @@ function coerceElement(elementOrRef) {
  * @param value the value to coerce into an array of strings
  * @param separator split-separator if value isn't an array
  */
-function coerceStringArray(value, separator = /\s+/) {
+function coerceStringArray$1(value, separator = /\s+/) {
     const result = [];
     if (value != null) {
         const sourceValues = Array.isArray(value) ? value : `${value}`.split(separator);
@@ -76,6 +76,314 @@ function coerceStringArray(value, separator = /\s+/) {
         }
     }
     return result;
+}
+
+// Whether the current platform supports the V8 Break Iterator. The V8 check
+// is necessary to detect all Blink based browsers.
+let hasV8BreakIterator$1;
+// We need a try/catch around the reference to `Intl`, because accessing it in some cases can
+// cause IE to throw. These cases are tied to particular versions of Windows and can happen if
+// the consumer is providing a polyfilled `Map`. See:
+// https://github.com/Microsoft/ChakraCore/issues/3189
+// https://github.com/angular/components/issues/15687
+try {
+    hasV8BreakIterator$1 = typeof Intl !== 'undefined' && Intl.v8BreakIterator;
+}
+catch {
+    hasV8BreakIterator$1 = false;
+}
+/**
+ * Service to detect the current platform by comparing the userAgent strings and
+ * checking browser-specific global properties.
+ */
+class Platform$1 {
+    constructor(_platformId) {
+        this._platformId = _platformId;
+        // We want to use the Angular platform check because if the Document is shimmed
+        // without the navigator, the following checks will fail. This is preferred because
+        // sometimes the Document may be shimmed without the user's knowledge or intention
+        /** Whether the Angular application is being rendered in the browser. */
+        this.isBrowser = this._platformId
+            ? isPlatformBrowser(this._platformId)
+            : typeof document === 'object' && !!document;
+        /** Whether the current browser is Microsoft Edge. */
+        this.EDGE = this.isBrowser && /(edge)/i.test(navigator.userAgent);
+        /** Whether the current rendering engine is Microsoft Trident. */
+        this.TRIDENT = this.isBrowser && /(msie|trident)/i.test(navigator.userAgent);
+        // EdgeHTML and Trident mock Blink specific things and need to be excluded from this check.
+        /** Whether the current rendering engine is Blink. */
+        this.BLINK = this.isBrowser &&
+            !!(window.chrome || hasV8BreakIterator$1) &&
+            typeof CSS !== 'undefined' &&
+            !this.EDGE &&
+            !this.TRIDENT;
+        // Webkit is part of the userAgent in EdgeHTML, Blink and Trident. Therefore we need to
+        // ensure that Webkit runs standalone and is not used as another engine's base.
+        /** Whether the current rendering engine is WebKit. */
+        this.WEBKIT = this.isBrowser &&
+            /AppleWebKit/i.test(navigator.userAgent) &&
+            !this.BLINK &&
+            !this.EDGE &&
+            !this.TRIDENT;
+        /** Whether the current platform is Apple iOS. */
+        this.IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window);
+        // It's difficult to detect the plain Gecko engine, because most of the browsers identify
+        // them self as Gecko-like browsers and modify the userAgent's according to that.
+        // Since we only cover one explicit Firefox case, we can simply check for Firefox
+        // instead of having an unstable check for Gecko.
+        /** Whether the current browser is Firefox. */
+        this.FIREFOX = this.isBrowser && /(firefox|minefield)/i.test(navigator.userAgent);
+        /** Whether the current platform is Android. */
+        // Trident on mobile adds the android platform to the userAgent to trick detections.
+        this.ANDROID = this.isBrowser && /android/i.test(navigator.userAgent) && !this.TRIDENT;
+        // Safari browsers will include the Safari keyword in their userAgent. Some browsers may fake
+        // this and just place the Safari keyword in the userAgent. To be more safe about Safari every
+        // Safari browser should also use Webkit as its layout engine.
+        /** Whether the current browser is Safari. */
+        this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: Platform$1, deps: [{ token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: Platform$1, providedIn: 'root' }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: Platform$1, decorators: [{
+            type: Injectable,
+            args: [{ providedIn: 'root' }]
+        }], ctorParameters: () => [{ type: Object, decorators: [{
+                    type: Inject,
+                    args: [PLATFORM_ID]
+                }] }] });
+
+class PlatformModule$1 {
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: PlatformModule$1, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
+    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.0.4", ngImport: i0, type: PlatformModule$1 }); }
+    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: PlatformModule$1 }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: PlatformModule$1, decorators: [{
+            type: NgModule,
+            args: [{}]
+        }] });
+
+/** Cached result Set of input types support by the current browser. */
+let supportedInputTypes$1;
+/** Types of `<input>` that *might* be supported. */
+const candidateInputTypes$1 = [
+    // `color` must come first. Chrome 56 shows a warning if we change the type to `color` after
+    // first changing it to something else:
+    // The specified value "" does not conform to the required format.
+    // The format is "#rrggbb" where rr, gg, bb are two-digit hexadecimal numbers.
+    'color',
+    'button',
+    'checkbox',
+    'date',
+    'datetime-local',
+    'email',
+    'file',
+    'hidden',
+    'image',
+    'month',
+    'number',
+    'password',
+    'radio',
+    'range',
+    'reset',
+    'search',
+    'submit',
+    'tel',
+    'text',
+    'time',
+    'url',
+    'week',
+];
+/** @returns The input types supported by this browser. */
+function getSupportedInputTypes$1() {
+    // Result is cached.
+    if (supportedInputTypes$1) {
+        return supportedInputTypes$1;
+    }
+    // We can't check if an input type is not supported until we're on the browser, so say that
+    // everything is supported when not on the browser. We don't use `Platform` here since it's
+    // just a helper function and can't inject it.
+    if (typeof document !== 'object' || !document) {
+        supportedInputTypes$1 = new Set(candidateInputTypes$1);
+        return supportedInputTypes$1;
+    }
+    let featureTestInput = document.createElement('input');
+    supportedInputTypes$1 = new Set(candidateInputTypes$1.filter(value => {
+        featureTestInput.setAttribute('type', value);
+        return featureTestInput.type === value;
+    }));
+    return supportedInputTypes$1;
+}
+
+/** Cached result of whether the user's browser supports passive event listeners. */
+let supportsPassiveEvents$1;
+/**
+ * Checks whether the user's browser supports passive event listeners.
+ * See: https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
+ */
+function supportsPassiveEventListeners$1() {
+    if (supportsPassiveEvents$1 == null && typeof window !== 'undefined') {
+        try {
+            window.addEventListener('test', null, Object.defineProperty({}, 'passive', {
+                get: () => (supportsPassiveEvents$1 = true),
+            }));
+        }
+        finally {
+            supportsPassiveEvents$1 = supportsPassiveEvents$1 || false;
+        }
+    }
+    return supportsPassiveEvents$1;
+}
+/**
+ * Normalizes an `AddEventListener` object to something that can be passed
+ * to `addEventListener` on any browser, no matter whether it supports the
+ * `options` parameter.
+ * @param options Object to be normalized.
+ */
+function normalizePassiveListenerOptions$1(options) {
+    return supportsPassiveEventListeners$1() ? options : !!options.capture;
+}
+
+/** Cached result of the way the browser handles the horizontal scroll axis in RTL mode. */
+let rtlScrollAxisType$1;
+/** Cached result of the check that indicates whether the browser supports scroll behaviors. */
+let scrollBehaviorSupported$1;
+/** Check whether the browser supports scroll behaviors. */
+function supportsScrollBehavior$1() {
+    if (scrollBehaviorSupported$1 == null) {
+        // If we're not in the browser, it can't be supported. Also check for `Element`, because
+        // some projects stub out the global `document` during SSR which can throw us off.
+        if (typeof document !== 'object' || !document || typeof Element !== 'function' || !Element) {
+            scrollBehaviorSupported$1 = false;
+            return scrollBehaviorSupported$1;
+        }
+        // If the element can have a `scrollBehavior` style, we can be sure that it's supported.
+        if ('scrollBehavior' in document.documentElement.style) {
+            scrollBehaviorSupported$1 = true;
+        }
+        else {
+            // At this point we have 3 possibilities: `scrollTo` isn't supported at all, it's
+            // supported but it doesn't handle scroll behavior, or it has been polyfilled.
+            const scrollToFunction = Element.prototype.scrollTo;
+            if (scrollToFunction) {
+                // We can detect if the function has been polyfilled by calling `toString` on it. Native
+                // functions are obfuscated using `[native code]`, whereas if it was overwritten we'd get
+                // the actual function source. Via https://davidwalsh.name/detect-native-function. Consider
+                // polyfilled functions as supporting scroll behavior.
+                scrollBehaviorSupported$1 = !/\{\s*\[native code\]\s*\}/.test(scrollToFunction.toString());
+            }
+            else {
+                scrollBehaviorSupported$1 = false;
+            }
+        }
+    }
+    return scrollBehaviorSupported$1;
+}
+/**
+ * Checks the type of RTL scroll axis used by this browser. As of time of writing, Chrome is NORMAL,
+ * Firefox & Safari are NEGATED, and IE & Edge are INVERTED.
+ */
+function getRtlScrollAxisType$1() {
+    // We can't check unless we're on the browser. Just assume 'normal' if we're not.
+    if (typeof document !== 'object' || !document) {
+        return 0 /* RtlScrollAxisType.NORMAL */;
+    }
+    if (rtlScrollAxisType$1 == null) {
+        // Create a 1px wide scrolling container and a 2px wide content element.
+        const scrollContainer = document.createElement('div');
+        const containerStyle = scrollContainer.style;
+        scrollContainer.dir = 'rtl';
+        containerStyle.width = '1px';
+        containerStyle.overflow = 'auto';
+        containerStyle.visibility = 'hidden';
+        containerStyle.pointerEvents = 'none';
+        containerStyle.position = 'absolute';
+        const content = document.createElement('div');
+        const contentStyle = content.style;
+        contentStyle.width = '2px';
+        contentStyle.height = '1px';
+        scrollContainer.appendChild(content);
+        document.body.appendChild(scrollContainer);
+        rtlScrollAxisType$1 = 0 /* RtlScrollAxisType.NORMAL */;
+        // The viewport starts scrolled all the way to the right in RTL mode. If we are in a NORMAL
+        // browser this would mean that the scrollLeft should be 1. If it's zero instead we know we're
+        // dealing with one of the other two types of browsers.
+        if (scrollContainer.scrollLeft === 0) {
+            // In a NEGATED browser the scrollLeft is always somewhere in [-maxScrollAmount, 0]. For an
+            // INVERTED browser it is always somewhere in [0, maxScrollAmount]. We can determine which by
+            // setting to the scrollLeft to 1. This is past the max for a NEGATED browser, so it will
+            // return 0 when we read it again.
+            scrollContainer.scrollLeft = 1;
+            rtlScrollAxisType$1 =
+                scrollContainer.scrollLeft === 0 ? 1 /* RtlScrollAxisType.NEGATED */ : 2 /* RtlScrollAxisType.INVERTED */;
+        }
+        scrollContainer.remove();
+    }
+    return rtlScrollAxisType$1;
+}
+
+let shadowDomIsSupported$1;
+/** Checks whether the user's browser support Shadow DOM. */
+function _supportsShadowDom$1() {
+    if (shadowDomIsSupported$1 == null) {
+        const head = typeof document !== 'undefined' ? document.head : null;
+        shadowDomIsSupported$1 = !!(head && (head.createShadowRoot || head.attachShadow));
+    }
+    return shadowDomIsSupported$1;
+}
+/** Gets the shadow root of an element, if supported and the element is inside the Shadow DOM. */
+function _getShadowRoot$1(element) {
+    if (_supportsShadowDom$1()) {
+        const rootNode = element.getRootNode ? element.getRootNode() : null;
+        // Note that this should be caught by `_supportsShadowDom`, but some
+        // teams have been able to hit this code path on unsupported browsers.
+        if (typeof ShadowRoot !== 'undefined' && ShadowRoot && rootNode instanceof ShadowRoot) {
+            return rootNode;
+        }
+    }
+    return null;
+}
+/**
+ * Gets the currently-focused element on the page while
+ * also piercing through Shadow DOM boundaries.
+ */
+function _getFocusedElementPierceShadowDom$1() {
+    let activeElement = typeof document !== 'undefined' && document
+        ? document.activeElement
+        : null;
+    while (activeElement && activeElement.shadowRoot) {
+        const newActiveElement = activeElement.shadowRoot.activeElement;
+        if (newActiveElement === activeElement) {
+            break;
+        }
+        else {
+            activeElement = newActiveElement;
+        }
+    }
+    return activeElement;
+}
+/** Gets the target of an event while accounting for Shadow DOM. */
+function _getEventTarget$1(event) {
+    // If an event is bound outside the Shadow DOM, the `event.target` will
+    // point to the shadow root so we have to use `composedPath` instead.
+    return (event.composedPath ? event.composedPath()[0] : event.target);
+}
+
+/** Gets whether the code is currently running in a test environment. */
+function _isTestEnvironment$1() {
+    // We can't use `declare const` because it causes conflicts inside Google with the real typings
+    // for these symbols and we can't read them off the global object, because they don't appear to
+    // be attached there for some runners like Jest.
+    // (see: https://github.com/angular/components/issues/23365#issuecomment-938146643)
+    return (
+    // @ts-ignore
+    (typeof __karma__ !== 'undefined' && !!__karma__) ||
+        // @ts-ignore
+        (typeof jasmine !== 'undefined' && !!jasmine) ||
+        // @ts-ignore
+        (typeof jest !== 'undefined' && !!jest) ||
+        // @ts-ignore
+        (typeof Mocha !== 'undefined' && !!Mocha));
 }
 
 // Whether the current platform supports the V8 Break Iterator. The V8 check
@@ -142,26 +450,26 @@ class Platform {
         /** Whether the current browser is Safari. */
         this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
     }
-    static { this.ɵfac = function Platform_Factory(t) { return new (t || Platform)(i0.ɵɵinject(PLATFORM_ID)); }; }
-    static { this.ɵprov = /*@__PURE__*/ i0.ɵɵdefineInjectable({ token: Platform, factory: Platform.ɵfac, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: Platform, deps: [{ token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: Platform, providedIn: 'root' }); }
 }
-(() => { (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(Platform, [{
-        type: Injectable,
-        args: [{ providedIn: 'root' }]
-    }], () => [{ type: Object, decorators: [{
-                type: Inject,
-                args: [PLATFORM_ID]
-            }] }], null); })();
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: Platform, decorators: [{
+            type: Injectable,
+            args: [{ providedIn: 'root' }]
+        }], ctorParameters: () => [{ type: Object, decorators: [{
+                    type: Inject,
+                    args: [PLATFORM_ID]
+                }] }] });
 
 class PlatformModule {
-    static { this.ɵfac = function PlatformModule_Factory(t) { return new (t || PlatformModule)(); }; }
-    static { this.ɵmod = /*@__PURE__*/ i0.ɵɵdefineNgModule({ type: PlatformModule }); }
-    static { this.ɵinj = /*@__PURE__*/ i0.ɵɵdefineInjector({}); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
+    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.0.4", ngImport: i0, type: PlatformModule }); }
+    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: PlatformModule }); }
 }
-(() => { (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(PlatformModule, [{
-        type: NgModule,
-        args: [{}]
-    }], null, null); })();
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: PlatformModule, decorators: [{
+            type: NgModule,
+            args: [{}]
+        }] });
 
 /** Cached result Set of input types support by the current browser. */
 let supportedInputTypes;
@@ -244,25 +552,6 @@ function normalizePassiveListenerOptions(options) {
     return supportsPassiveEventListeners() ? options : !!options.capture;
 }
 
-/** The possible ways the browser may handle the horizontal scroll axis in RTL languages. */
-var RtlScrollAxisType;
-(function (RtlScrollAxisType) {
-    /**
-     * scrollLeft is 0 when scrolled all the way left and (scrollWidth - clientWidth) when scrolled
-     * all the way right.
-     */
-    RtlScrollAxisType[RtlScrollAxisType["NORMAL"] = 0] = "NORMAL";
-    /**
-     * scrollLeft is -(scrollWidth - clientWidth) when scrolled all the way left and 0 when scrolled
-     * all the way right.
-     */
-    RtlScrollAxisType[RtlScrollAxisType["NEGATED"] = 1] = "NEGATED";
-    /**
-     * scrollLeft is (scrollWidth - clientWidth) when scrolled all the way left and 0 when scrolled
-     * all the way right.
-     */
-    RtlScrollAxisType[RtlScrollAxisType["INVERTED"] = 2] = "INVERTED";
-})(RtlScrollAxisType || (RtlScrollAxisType = {}));
 /** Cached result of the way the browser handles the horizontal scroll axis in RTL mode. */
 let rtlScrollAxisType;
 /** Cached result of the check that indicates whether the browser supports scroll behaviors. */
@@ -305,7 +594,7 @@ function supportsScrollBehavior() {
 function getRtlScrollAxisType() {
     // We can't check unless we're on the browser. Just assume 'normal' if we're not.
     if (typeof document !== 'object' || !document) {
-        return RtlScrollAxisType.NORMAL;
+        return 0 /* RtlScrollAxisType.NORMAL */;
     }
     if (rtlScrollAxisType == null) {
         // Create a 1px wide scrolling container and a 2px wide content element.
@@ -323,7 +612,7 @@ function getRtlScrollAxisType() {
         contentStyle.height = '1px';
         scrollContainer.appendChild(content);
         document.body.appendChild(scrollContainer);
-        rtlScrollAxisType = RtlScrollAxisType.NORMAL;
+        rtlScrollAxisType = 0 /* RtlScrollAxisType.NORMAL */;
         // The viewport starts scrolled all the way to the right in RTL mode. If we are in a NORMAL
         // browser this would mean that the scrollLeft should be 1. If it's zero instead we know we're
         // dealing with one of the other two types of browsers.
@@ -334,7 +623,7 @@ function getRtlScrollAxisType() {
             // return 0 when we read it again.
             scrollContainer.scrollLeft = 1;
             rtlScrollAxisType =
-                scrollContainer.scrollLeft === 0 ? RtlScrollAxisType.NEGATED : RtlScrollAxisType.INVERTED;
+                scrollContainer.scrollLeft === 0 ? 1 /* RtlScrollAxisType.NEGATED */ : 2 /* RtlScrollAxisType.INVERTED */;
         }
         scrollContainer.remove();
     }
@@ -403,6 +692,76 @@ function _isTestEnvironment() {
         (typeof jest !== 'undefined' && !!jest) ||
         // @ts-ignore
         (typeof Mocha !== 'undefined' && !!Mocha));
+}
+
+/** Coerces a data-bound value (typically a string) to a boolean. */
+function coerceBooleanProperty(value) {
+    return value != null && `${value}` !== 'false';
+}
+
+function coerceNumberProperty(value, fallbackValue = 0) {
+    return _isNumberValue(value) ? Number(value) : fallbackValue;
+}
+/**
+ * Whether the provided value is considered a number.
+ * @docs-private
+ */
+function _isNumberValue(value) {
+    // parseFloat(value) handles most of the cases we're interested in (it treats null, empty string,
+    // and other non-number values as NaN, where Number just uses 0) but it considers the string
+    // '123hello' to be a valid number. Therefore we also check if Number(value) is NaN.
+    return !isNaN(parseFloat(value)) && !isNaN(Number(value));
+}
+
+function coerceArray(value) {
+    return Array.isArray(value) ? value : [value];
+}
+
+/** Coerces a value to a CSS pixel value. */
+function coerceCssPixelValue(value) {
+    if (value == null) {
+        return '';
+    }
+    return typeof value === 'string' ? value : `${value}px`;
+}
+
+/**
+ * Coerces an ElementRef or an Element into an element.
+ * Useful for APIs that can accept either a ref or the native element itself.
+ */
+function coerceElement(elementOrRef) {
+    return elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
+}
+
+/**
+ * Coerces a value to an array of trimmed non-empty strings.
+ * Any input that is not an array, `null` or `undefined` will be turned into a string
+ * via `toString()` and subsequently split with the given separator.
+ * `null` and `undefined` will result in an empty array.
+ * This results in the following outcomes:
+ * - `null` -&gt; `[]`
+ * - `[null]` -&gt; `["null"]`
+ * - `["a", "b ", " "]` -&gt; `["a", "b"]`
+ * - `[1, [2, 3]]` -&gt; `["1", "2,3"]`
+ * - `[{ a: 0 }]` -&gt; `["[object Object]"]`
+ * - `{ a: 0 }` -&gt; `["[object", "Object]"]`
+ *
+ * Useful for defining CSS classes or table columns.
+ * @param value the value to coerce into an array of strings
+ * @param separator split-separator if value isn't an array
+ */
+function coerceStringArray(value, separator = /\s+/) {
+    const result = [];
+    if (value != null) {
+        const sourceValues = Array.isArray(value) ? value : `${value}`.split(separator);
+        for (const sourceValue of sourceValues) {
+            const trimmedString = `${sourceValue}`.trim();
+            if (trimmedString) {
+                result.push(trimmedString);
+            }
+        }
+    }
+    return result;
 }
 
 /** Options to pass to the animationstart listener. */
@@ -817,7 +1176,7 @@ class TextFieldModule {
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(TextFieldModule, { imports: [CdkAutofill, CdkTextareaAutosize], exports: [CdkAutofill, CdkTextareaAutosize] }); })();
 
 /** Current version of Angular Material. */
-const VERSION$1 = new Version('17.1.0-next.1+sha-0f8d0e0-with-local-changes');
+const VERSION$1 = new Version('17.1.0-next.1+sha-92c95c8-with-local-changes');
 
 /** @docs-private */
 class AnimationCurves {
@@ -1089,131 +1448,131 @@ function setMessageId(element, serviceId) {
     }
 }
 
-const MAC_ENTER = 3;
-const BACKSPACE = 8;
-const TAB = 9;
-const NUM_CENTER = 12;
-const ENTER = 13;
-const SHIFT = 16;
-const CONTROL = 17;
-const ALT = 18;
-const PAUSE = 19;
-const CAPS_LOCK = 20;
-const ESCAPE = 27;
-const SPACE = 32;
-const PAGE_UP = 33;
-const PAGE_DOWN = 34;
-const END = 35;
-const HOME = 36;
-const LEFT_ARROW = 37;
-const UP_ARROW = 38;
-const RIGHT_ARROW = 39;
-const DOWN_ARROW = 40;
-const PLUS_SIGN = 43;
-const PRINT_SCREEN = 44;
-const INSERT = 45;
-const DELETE = 46;
-const ZERO = 48;
-const ONE = 49;
-const TWO = 50;
-const THREE = 51;
-const FOUR = 52;
-const FIVE = 53;
-const SIX = 54;
-const SEVEN = 55;
-const EIGHT = 56;
-const NINE = 57;
-const FF_SEMICOLON = 59; // Firefox (Gecko) fires this for semicolon instead of 186
-const FF_EQUALS = 61; // Firefox (Gecko) fires this for equals instead of 187
-const QUESTION_MARK = 63;
-const AT_SIGN = 64;
-const A = 65;
-const B = 66;
-const C = 67;
-const D = 68;
-const E = 69;
-const F = 70;
-const G = 71;
-const H = 72;
-const I = 73;
-const J = 74;
-const K = 75;
-const L = 76;
-const M = 77;
-const N = 78;
-const O = 79;
-const P = 80;
-const Q = 81;
-const R = 82;
-const S = 83;
-const T = 84;
-const U = 85;
-const V = 86;
-const W = 87;
-const X = 88;
-const Y = 89;
-const Z = 90;
-const META = 91; // WIN_KEY_LEFT
-const MAC_WK_CMD_LEFT = 91;
-const MAC_WK_CMD_RIGHT = 93;
-const CONTEXT_MENU = 93;
-const NUMPAD_ZERO = 96;
-const NUMPAD_ONE = 97;
-const NUMPAD_TWO = 98;
-const NUMPAD_THREE = 99;
-const NUMPAD_FOUR = 100;
-const NUMPAD_FIVE = 101;
-const NUMPAD_SIX = 102;
-const NUMPAD_SEVEN = 103;
-const NUMPAD_EIGHT = 104;
-const NUMPAD_NINE = 105;
-const NUMPAD_MULTIPLY = 106;
-const NUMPAD_PLUS = 107;
-const NUMPAD_MINUS = 109;
-const NUMPAD_PERIOD = 110;
-const NUMPAD_DIVIDE = 111;
-const F1 = 112;
-const F2 = 113;
-const F3 = 114;
-const F4 = 115;
-const F5 = 116;
-const F6 = 117;
-const F7 = 118;
-const F8 = 119;
-const F9 = 120;
-const F10 = 121;
-const F11 = 122;
-const F12 = 123;
-const NUM_LOCK = 144;
-const SCROLL_LOCK = 145;
-const FIRST_MEDIA = 166;
-const FF_MINUS = 173;
-const MUTE = 173; // Firefox (Gecko) fires 181 for MUTE
-const VOLUME_DOWN = 174; // Firefox (Gecko) fires 182 for VOLUME_DOWN
-const VOLUME_UP = 175; // Firefox (Gecko) fires 183 for VOLUME_UP
-const FF_MUTE = 181;
-const FF_VOLUME_DOWN = 182;
-const LAST_MEDIA = 183;
-const FF_VOLUME_UP = 183;
-const SEMICOLON = 186; // Firefox (Gecko) fires 59 for SEMICOLON
-const EQUALS = 187; // Firefox (Gecko) fires 61 for EQUALS
-const COMMA = 188;
-const DASH = 189; // Firefox (Gecko) fires 173 for DASH/MINUS
-const PERIOD = 190;
-const SLASH = 191;
-const APOSTROPHE = 192;
-const TILDE = 192;
-const OPEN_SQUARE_BRACKET = 219;
-const BACKSLASH = 220;
-const CLOSE_SQUARE_BRACKET = 221;
-const SINGLE_QUOTE = 222;
-const MAC_META = 224;
+const MAC_ENTER$1 = 3;
+const BACKSPACE$1 = 8;
+const TAB$1 = 9;
+const NUM_CENTER$1 = 12;
+const ENTER$1 = 13;
+const SHIFT$1 = 16;
+const CONTROL$1 = 17;
+const ALT$1 = 18;
+const PAUSE$1 = 19;
+const CAPS_LOCK$1 = 20;
+const ESCAPE$1 = 27;
+const SPACE$1 = 32;
+const PAGE_UP$1 = 33;
+const PAGE_DOWN$1 = 34;
+const END$1 = 35;
+const HOME$1 = 36;
+const LEFT_ARROW$1 = 37;
+const UP_ARROW$1 = 38;
+const RIGHT_ARROW$1 = 39;
+const DOWN_ARROW$1 = 40;
+const PLUS_SIGN$1 = 43;
+const PRINT_SCREEN$1 = 44;
+const INSERT$1 = 45;
+const DELETE$1 = 46;
+const ZERO$1 = 48;
+const ONE$1 = 49;
+const TWO$1 = 50;
+const THREE$1 = 51;
+const FOUR$1 = 52;
+const FIVE$1 = 53;
+const SIX$1 = 54;
+const SEVEN$1 = 55;
+const EIGHT$1 = 56;
+const NINE$1 = 57;
+const FF_SEMICOLON$1 = 59; // Firefox (Gecko) fires this for semicolon instead of 186
+const FF_EQUALS$1 = 61; // Firefox (Gecko) fires this for equals instead of 187
+const QUESTION_MARK$1 = 63;
+const AT_SIGN$1 = 64;
+const A$1 = 65;
+const B$1 = 66;
+const C$1 = 67;
+const D$1 = 68;
+const E$1 = 69;
+const F$1 = 70;
+const G$1 = 71;
+const H$1 = 72;
+const I$1 = 73;
+const J$1 = 74;
+const K$1 = 75;
+const L$1 = 76;
+const M$1 = 77;
+const N$1 = 78;
+const O$1 = 79;
+const P$1 = 80;
+const Q$1 = 81;
+const R$1 = 82;
+const S$1 = 83;
+const T$1 = 84;
+const U$1 = 85;
+const V$1 = 86;
+const W$1 = 87;
+const X$1 = 88;
+const Y$1 = 89;
+const Z$1 = 90;
+const META$1 = 91; // WIN_KEY_LEFT
+const MAC_WK_CMD_LEFT$1 = 91;
+const MAC_WK_CMD_RIGHT$1 = 93;
+const CONTEXT_MENU$1 = 93;
+const NUMPAD_ZERO$1 = 96;
+const NUMPAD_ONE$1 = 97;
+const NUMPAD_TWO$1 = 98;
+const NUMPAD_THREE$1 = 99;
+const NUMPAD_FOUR$1 = 100;
+const NUMPAD_FIVE$1 = 101;
+const NUMPAD_SIX$1 = 102;
+const NUMPAD_SEVEN$1 = 103;
+const NUMPAD_EIGHT$1 = 104;
+const NUMPAD_NINE$1 = 105;
+const NUMPAD_MULTIPLY$1 = 106;
+const NUMPAD_PLUS$1 = 107;
+const NUMPAD_MINUS$1 = 109;
+const NUMPAD_PERIOD$1 = 110;
+const NUMPAD_DIVIDE$1 = 111;
+const F1$1 = 112;
+const F2$1 = 113;
+const F3$1 = 114;
+const F4$1 = 115;
+const F5$1 = 116;
+const F6$1 = 117;
+const F7$1 = 118;
+const F8$1 = 119;
+const F9$1 = 120;
+const F10$1 = 121;
+const F11$1 = 122;
+const F12$1 = 123;
+const NUM_LOCK$1 = 144;
+const SCROLL_LOCK$1 = 145;
+const FIRST_MEDIA$1 = 166;
+const FF_MINUS$1 = 173;
+const MUTE$1 = 173; // Firefox (Gecko) fires 181 for MUTE
+const VOLUME_DOWN$1 = 174; // Firefox (Gecko) fires 182 for VOLUME_DOWN
+const VOLUME_UP$1 = 175; // Firefox (Gecko) fires 183 for VOLUME_UP
+const FF_MUTE$1 = 181;
+const FF_VOLUME_DOWN$1 = 182;
+const LAST_MEDIA$1 = 183;
+const FF_VOLUME_UP$1 = 183;
+const SEMICOLON$1 = 186; // Firefox (Gecko) fires 59 for SEMICOLON
+const EQUALS$1 = 187; // Firefox (Gecko) fires 61 for EQUALS
+const COMMA$1 = 188;
+const DASH$1 = 189; // Firefox (Gecko) fires 173 for DASH/MINUS
+const PERIOD$1 = 190;
+const SLASH$1 = 191;
+const APOSTROPHE$1 = 192;
+const TILDE$1 = 192;
+const OPEN_SQUARE_BRACKET$1 = 219;
+const BACKSLASH$1 = 220;
+const CLOSE_SQUARE_BRACKET$1 = 221;
+const SINGLE_QUOTE$1 = 222;
+const MAC_META$1 = 224;
 
 /**
  * Checks whether a modifier key is pressed.
  * @param event Event to be checked.
  */
-function hasModifierKey(event, ...modifiers) {
+function hasModifierKey$1(event, ...modifiers) {
     if (modifiers.length) {
         return modifiers.some(modifier => event[modifier]);
     }
@@ -1383,10 +1742,10 @@ class ListKeyManager {
             return !event[modifier] || this._allowedModifierKeys.indexOf(modifier) > -1;
         });
         switch (keyCode) {
-            case TAB:
+            case TAB$1:
                 this.tabOut.next();
                 return;
-            case DOWN_ARROW:
+            case DOWN_ARROW$1:
                 if (this._vertical && isModifierAllowed) {
                     this.setNextItemActive();
                     break;
@@ -1394,7 +1753,7 @@ class ListKeyManager {
                 else {
                     return;
                 }
-            case UP_ARROW:
+            case UP_ARROW$1:
                 if (this._vertical && isModifierAllowed) {
                     this.setPreviousItemActive();
                     break;
@@ -1402,7 +1761,7 @@ class ListKeyManager {
                 else {
                     return;
                 }
-            case RIGHT_ARROW:
+            case RIGHT_ARROW$1:
                 if (this._horizontal && isModifierAllowed) {
                     this._horizontal === 'rtl' ? this.setPreviousItemActive() : this.setNextItemActive();
                     break;
@@ -1410,7 +1769,7 @@ class ListKeyManager {
                 else {
                     return;
                 }
-            case LEFT_ARROW:
+            case LEFT_ARROW$1:
                 if (this._horizontal && isModifierAllowed) {
                     this._horizontal === 'rtl' ? this.setNextItemActive() : this.setPreviousItemActive();
                     break;
@@ -1418,7 +1777,7 @@ class ListKeyManager {
                 else {
                     return;
                 }
-            case HOME:
+            case HOME$1:
                 if (this._homeAndEnd && isModifierAllowed) {
                     this.setFirstItemActive();
                     break;
@@ -1426,7 +1785,7 @@ class ListKeyManager {
                 else {
                     return;
                 }
-            case END:
+            case END$1:
                 if (this._homeAndEnd && isModifierAllowed) {
                     this.setLastItemActive();
                     break;
@@ -1434,7 +1793,7 @@ class ListKeyManager {
                 else {
                     return;
                 }
-            case PAGE_UP:
+            case PAGE_UP$1:
                 if (this._pageUpAndDown.enabled && isModifierAllowed) {
                     const targetIndex = this._activeItemIndex - this._pageUpAndDown.delta;
                     this._setActiveItemByIndex(targetIndex > 0 ? targetIndex : 0, 1);
@@ -1443,7 +1802,7 @@ class ListKeyManager {
                 else {
                     return;
                 }
-            case PAGE_DOWN:
+            case PAGE_DOWN$1:
                 if (this._pageUpAndDown.enabled && isModifierAllowed) {
                     const targetIndex = this._activeItemIndex + this._pageUpAndDown.delta;
                     const itemsLength = this._getItemsArray().length;
@@ -1454,13 +1813,13 @@ class ListKeyManager {
                     return;
                 }
             default:
-                if (isModifierAllowed || hasModifierKey(event, 'shiftKey')) {
+                if (isModifierAllowed || hasModifierKey$1(event, 'shiftKey')) {
                     // Attempt to use the `event.key` which also maps it to the user's keyboard language,
                     // otherwise fall back to resolving alphanumeric characters via the keyCode.
                     if (event.key && event.key.length === 1) {
                         this._letterKeyStream.next(event.key.toLocaleUpperCase());
                     }
-                    else if ((keyCode >= A && keyCode <= Z) || (keyCode >= ZERO && keyCode <= NINE)) {
+                    else if ((keyCode >= A$1 && keyCode <= Z$1) || (keyCode >= ZERO$1 && keyCode <= NINE$1)) {
                         this._letterKeyStream.next(String.fromCharCode(keyCode));
                     }
                 }
@@ -2436,7 +2795,7 @@ const INPUT_MODALITY_DETECTOR_OPTIONS = new InjectionToken('cdk-input-modality-d
  * distinguish between the two.
  */
 const INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS = {
-    ignoreKeys: [ALT, CONTROL, MAC_META, META, SHIFT],
+    ignoreKeys: [ALT$1, CONTROL$1, MAC_META$1, META$1, SHIFT$1],
 };
 /**
  * The amount of time needed to pass after a touchstart event in order for a subsequent mousedown
@@ -3787,18 +4146,18 @@ class Directionality {
     ngOnDestroy() {
         this.change.complete();
     }
-    static { this.ɵfac = function Directionality_Factory(t) { return new (t || Directionality)(i0.ɵɵinject(DIR_DOCUMENT, 8)); }; }
-    static { this.ɵprov = /*@__PURE__*/ i0.ɵɵdefineInjectable({ token: Directionality, factory: Directionality.ɵfac, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: Directionality, deps: [{ token: DIR_DOCUMENT, optional: true }], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: Directionality, providedIn: 'root' }); }
 }
-(() => { (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(Directionality, [{
-        type: Injectable,
-        args: [{ providedIn: 'root' }]
-    }], () => [{ type: undefined, decorators: [{
-                type: Optional
-            }, {
-                type: Inject,
-                args: [DIR_DOCUMENT]
-            }] }], null); })();
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: Directionality, decorators: [{
+            type: Injectable,
+            args: [{ providedIn: 'root' }]
+        }], ctorParameters: () => [{ type: undefined, decorators: [{
+                    type: Optional
+                }, {
+                    type: Inject,
+                    args: [DIR_DOCUMENT]
+                }] }] });
 
 /**
  * Directive to listen for changes of direction of part of the DOM.
@@ -3841,43 +4200,39 @@ class Dir {
     ngOnDestroy() {
         this.change.complete();
     }
-    static { this.ɵfac = function Dir_Factory(t) { return new (t || Dir)(); }; }
-    static { this.ɵdir = /*@__PURE__*/ i0.ɵɵdefineDirective({ type: Dir, selectors: [["", "dir", ""]], hostVars: 1, hostBindings: function Dir_HostBindings(rf, ctx) { if (rf & 2) {
-            i0.ɵɵattribute("dir", ctx._rawDir);
-        } }, inputs: { dir: "dir" }, outputs: { change: "dirChange" }, exportAs: ["dir"], standalone: true, features: [i0.ɵɵProvidersFeature([{ provide: Directionality, useExisting: Dir }])] }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: Dir, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.0.4", type: Dir, selector: "[dir]", inputs: { dir: "dir" }, outputs: { change: "dirChange" }, host: { properties: { "attr.dir": "_rawDir" } }, providers: [{ provide: Directionality, useExisting: Dir }], exportAs: ["dir"], ngImport: i0 }); }
 }
-(() => { (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(Dir, [{
-        type: Directive,
-        args: [{
-                selector: '[dir]',
-                providers: [{ provide: Directionality, useExisting: Dir }],
-                host: { '[attr.dir]': '_rawDir' },
-                exportAs: 'dir',
-                standalone: true,
-            }]
-    }], null, { change: [{
-            type: Output,
-            args: ['dirChange']
-        }], dir: [{
-            type: Input
-        }] }); })();
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: Dir, decorators: [{
+            type: Directive,
+            args: [{
+                    selector: '[dir]',
+                    providers: [{ provide: Directionality, useExisting: Dir }],
+                    host: { '[attr.dir]': '_rawDir' },
+                    exportAs: 'dir',
+                }]
+        }], propDecorators: { change: [{
+                type: Output,
+                args: ['dirChange']
+            }], dir: [{
+                type: Input
+            }] } });
 
 class BidiModule {
-    static { this.ɵfac = function BidiModule_Factory(t) { return new (t || BidiModule)(); }; }
-    static { this.ɵmod = /*@__PURE__*/ i0.ɵɵdefineNgModule({ type: BidiModule }); }
-    static { this.ɵinj = /*@__PURE__*/ i0.ɵɵdefineInjector({}); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: BidiModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule }); }
+    static { this.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.0.4", ngImport: i0, type: BidiModule, declarations: [Dir], exports: [Dir] }); }
+    static { this.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: BidiModule }); }
 }
-(() => { (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(BidiModule, [{
-        type: NgModule,
-        args: [{
-                imports: [Dir],
-                exports: [Dir],
-            }]
-    }], null, null); })();
-(function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(BidiModule, { imports: [Dir], exports: [Dir] }); })();
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: BidiModule, decorators: [{
+            type: NgModule,
+            args: [{
+                    exports: [Dir],
+                    declarations: [Dir],
+                }]
+        }] });
 
 /** Current version of the Angular Component Development Kit. */
-const VERSION = new Version('17.1.0-next.1+sha-0f8d0e0-with-local-changes');
+const VERSION = new Version('17.0.3');
 
 /** @docs-private */
 function MATERIAL_SANITY_CHECKS_FACTORY() {
@@ -3907,7 +4262,7 @@ class MatCommonModule {
             this._hasDoneGlobalChecks = true;
             if (typeof ngDevMode === 'undefined' || ngDevMode) {
                 // Inject in here so the reference to `Platform` can be removed in production mode.
-                const platform = inject(Platform, { optional: true });
+                const platform = inject(Platform$1, { optional: true });
                 if (this._checkIsEnabled('doctype')) {
                     _checkDoctypeIsDefined(this._document);
                 }
@@ -3922,7 +4277,7 @@ class MatCommonModule {
     }
     /** Gets whether a specific sanity check is enabled. */
     _checkIsEnabled(name) {
-        if (_isTestEnvironment()) {
+        if (_isTestEnvironment$1()) {
             return false;
         }
         if (typeof this._sanityChecks === 'boolean') {
@@ -3997,7 +4352,7 @@ function mixinDisabled(base) {
             return this._disabled;
         }
         set disabled(value) {
-            this._disabled = coerceBooleanProperty(value);
+            this._disabled = coerceBooleanProperty$1(value);
         }
         constructor(...args) {
             super(...args);
@@ -4039,7 +4394,7 @@ function mixinDisableRipple(base) {
             return this._disableRipple;
         }
         set disableRipple(value) {
-            this._disableRipple = coerceBooleanProperty(value);
+            this._disableRipple = coerceBooleanProperty$1(value);
         }
         constructor(...args) {
             super(...args);
@@ -4055,7 +4410,7 @@ function mixinTabIndex(base, defaultTabIndex = 0) {
         }
         set tabIndex(value) {
             // If the specified tabIndex value is null or undefined, fall back to the default value.
-            this._tabIndex = value != null ? coerceNumberProperty(value) : this.defaultTabIndex;
+            this._tabIndex = value != null ? coerceNumberProperty$1(value) : this.defaultTabIndex;
         }
         constructor(...args) {
             super(...args);
@@ -4637,7 +4992,7 @@ class RippleRef {
 }
 
 /** Options used to bind a passive capturing event. */
-const passiveCapturingEventOptions$1 = normalizePassiveListenerOptions({
+const passiveCapturingEventOptions$1 = normalizePassiveListenerOptions$1({
     passive: true,
     capture: true,
 });
@@ -4647,7 +5002,7 @@ class RippleEventManager {
         this._events = new Map();
         /** Event handler that is bound and which dispatches the events to the different targets. */
         this._delegateEventHandler = (event) => {
-            const target = _getEventTarget(event);
+            const target = _getEventTarget$1(event);
             if (target) {
                 this._events.get(event.type)?.forEach((handlers, element) => {
                     if (element === target || element.contains(target)) {
@@ -4711,7 +5066,7 @@ const defaultRippleAnimationConfig = {
  */
 const ignoreMouseEventsTimeout = 800;
 /** Options used to bind a passive capturing event. */
-const passiveCapturingEventOptions = normalizePassiveListenerOptions({
+const passiveCapturingEventOptions = normalizePassiveListenerOptions$1({
     passive: true,
     capture: true,
 });
@@ -4745,7 +5100,7 @@ class RippleRenderer {
         this._pointerUpEventsRegistered = false;
         // Only do anything if we're on the browser.
         if (_platform.isBrowser) {
-            this._containerElement = coerceElement(elementOrElementRef);
+            this._containerElement = coerceElement$1(elementOrElementRef);
         }
     }
     /**
@@ -4866,7 +5221,7 @@ class RippleRenderer {
     }
     /** Sets up the trigger event listeners */
     setupTriggerEvents(elementOrElementRef) {
-        const element = coerceElement(elementOrElementRef);
+        const element = coerceElement$1(elementOrElementRef);
         if (!this._platform.isBrowser || !element || element === this._triggerElement) {
             return;
         }
@@ -5124,7 +5479,7 @@ class MatRipple {
             return this._rippleRenderer.fadeInRipple(0, 0, { ...this.rippleConfig, ...configOrX });
         }
     }
-    static { this.ɵfac = function MatRipple_Factory(t) { return new (t || MatRipple)(i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.NgZone), i0.ɵɵdirectiveInject(Platform), i0.ɵɵdirectiveInject(MAT_RIPPLE_GLOBAL_OPTIONS, 8), i0.ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8)); }; }
+    static { this.ɵfac = function MatRipple_Factory(t) { return new (t || MatRipple)(i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.NgZone), i0.ɵɵdirectiveInject(Platform$1), i0.ɵɵdirectiveInject(MAT_RIPPLE_GLOBAL_OPTIONS, 8), i0.ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8)); }; }
     static { this.ɵdir = /*@__PURE__*/ i0.ɵɵdefineDirective({ type: MatRipple, selectors: [["", "mat-ripple", ""], ["", "matRipple", ""]], hostAttrs: [1, "mat-ripple"], hostVars: 2, hostBindings: function MatRipple_HostBindings(rf, ctx) { if (rf & 2) {
             i0.ɵɵclassProp("mat-ripple-unbounded", ctx.unbounded);
         } }, inputs: { color: ["matRippleColor", "color"], unbounded: ["matRippleUnbounded", "unbounded"], centered: ["matRippleCentered", "centered"], radius: ["matRippleRadius", "radius"], animation: ["matRippleAnimation", "animation"], disabled: ["matRippleDisabled", "disabled"], trigger: ["matRippleTrigger", "trigger"] }, exportAs: ["matRipple"], standalone: true }); }
@@ -5140,7 +5495,7 @@ class MatRipple {
                 },
                 standalone: true,
             }]
-    }], () => [{ type: i0.ElementRef }, { type: i0.NgZone }, { type: Platform }, { type: undefined, decorators: [{
+    }], () => [{ type: i0.ElementRef }, { type: i0.NgZone }, { type: Platform$1 }, { type: undefined, decorators: [{
                 type: Optional
             }, {
                 type: Inject,
@@ -5256,6 +5611,137 @@ class MatPseudoCheckboxModule {
             }]
     }], null, null); })();
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(MatPseudoCheckboxModule, { imports: [MatCommonModule, MatPseudoCheckbox], exports: [MatPseudoCheckbox] }); })();
+
+const MAC_ENTER = 3;
+const BACKSPACE = 8;
+const TAB = 9;
+const NUM_CENTER = 12;
+const ENTER = 13;
+const SHIFT = 16;
+const CONTROL = 17;
+const ALT = 18;
+const PAUSE = 19;
+const CAPS_LOCK = 20;
+const ESCAPE = 27;
+const SPACE = 32;
+const PAGE_UP = 33;
+const PAGE_DOWN = 34;
+const END = 35;
+const HOME = 36;
+const LEFT_ARROW = 37;
+const UP_ARROW = 38;
+const RIGHT_ARROW = 39;
+const DOWN_ARROW = 40;
+const PLUS_SIGN = 43;
+const PRINT_SCREEN = 44;
+const INSERT = 45;
+const DELETE = 46;
+const ZERO = 48;
+const ONE = 49;
+const TWO = 50;
+const THREE = 51;
+const FOUR = 52;
+const FIVE = 53;
+const SIX = 54;
+const SEVEN = 55;
+const EIGHT = 56;
+const NINE = 57;
+const FF_SEMICOLON = 59; // Firefox (Gecko) fires this for semicolon instead of 186
+const FF_EQUALS = 61; // Firefox (Gecko) fires this for equals instead of 187
+const QUESTION_MARK = 63;
+const AT_SIGN = 64;
+const A = 65;
+const B = 66;
+const C = 67;
+const D = 68;
+const E = 69;
+const F = 70;
+const G = 71;
+const H = 72;
+const I = 73;
+const J = 74;
+const K = 75;
+const L = 76;
+const M = 77;
+const N = 78;
+const O = 79;
+const P = 80;
+const Q = 81;
+const R = 82;
+const S = 83;
+const T = 84;
+const U = 85;
+const V = 86;
+const W = 87;
+const X = 88;
+const Y = 89;
+const Z = 90;
+const META = 91; // WIN_KEY_LEFT
+const MAC_WK_CMD_LEFT = 91;
+const MAC_WK_CMD_RIGHT = 93;
+const CONTEXT_MENU = 93;
+const NUMPAD_ZERO = 96;
+const NUMPAD_ONE = 97;
+const NUMPAD_TWO = 98;
+const NUMPAD_THREE = 99;
+const NUMPAD_FOUR = 100;
+const NUMPAD_FIVE = 101;
+const NUMPAD_SIX = 102;
+const NUMPAD_SEVEN = 103;
+const NUMPAD_EIGHT = 104;
+const NUMPAD_NINE = 105;
+const NUMPAD_MULTIPLY = 106;
+const NUMPAD_PLUS = 107;
+const NUMPAD_MINUS = 109;
+const NUMPAD_PERIOD = 110;
+const NUMPAD_DIVIDE = 111;
+const F1 = 112;
+const F2 = 113;
+const F3 = 114;
+const F4 = 115;
+const F5 = 116;
+const F6 = 117;
+const F7 = 118;
+const F8 = 119;
+const F9 = 120;
+const F10 = 121;
+const F11 = 122;
+const F12 = 123;
+const NUM_LOCK = 144;
+const SCROLL_LOCK = 145;
+const FIRST_MEDIA = 166;
+const FF_MINUS = 173;
+const MUTE = 173; // Firefox (Gecko) fires 181 for MUTE
+const VOLUME_DOWN = 174; // Firefox (Gecko) fires 182 for VOLUME_DOWN
+const VOLUME_UP = 175; // Firefox (Gecko) fires 183 for VOLUME_UP
+const FF_MUTE = 181;
+const FF_VOLUME_DOWN = 182;
+const LAST_MEDIA = 183;
+const FF_VOLUME_UP = 183;
+const SEMICOLON = 186; // Firefox (Gecko) fires 59 for SEMICOLON
+const EQUALS = 187; // Firefox (Gecko) fires 61 for EQUALS
+const COMMA = 188;
+const DASH = 189; // Firefox (Gecko) fires 173 for DASH/MINUS
+const PERIOD = 190;
+const SLASH = 191;
+const APOSTROPHE = 192;
+const TILDE = 192;
+const OPEN_SQUARE_BRACKET = 219;
+const BACKSLASH = 220;
+const CLOSE_SQUARE_BRACKET = 221;
+const SINGLE_QUOTE = 222;
+const MAC_META = 224;
+
+/**
+ * Checks whether a modifier key is pressed.
+ * @param event Event to be checked.
+ */
+function hasModifierKey(event, ...modifiers) {
+    if (modifiers.length) {
+        return modifiers.some(modifier => event[modifier]);
+    }
+    return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
+}
 
 /**
  * Injection token used to provide the parent component to options.
@@ -5704,7 +6190,7 @@ class MatRippleLoader {
         this._document = inject(DOCUMENT, { optional: true });
         this._animationMode = inject(ANIMATION_MODULE_TYPE$1, { optional: true });
         this._globalRippleOptions = inject(MAT_RIPPLE_GLOBAL_OPTIONS, { optional: true });
-        this._platform = inject(Platform);
+        this._platform = inject(Platform$1);
         this._ngZone = inject(NgZone);
         /** Handles creating and attaching component internals when a component it is initially interacted with. */
         this._onInteraction = (event) => {
@@ -6056,15 +6542,15 @@ class SharedResizeObserver {
         }
         return this._observers.get(box).observe(target);
     }
-    static { this.ɵfac = function SharedResizeObserver_Factory(t) { return new (t || SharedResizeObserver)(); }; }
-    static { this.ɵprov = /*@__PURE__*/ i0.ɵɵdefineInjectable({ token: SharedResizeObserver, factory: SharedResizeObserver.ɵfac, providedIn: 'root' }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: SharedResizeObserver, deps: [], target: i0.ɵɵFactoryTarget.Injectable }); }
+    static { this.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: SharedResizeObserver, providedIn: 'root' }); }
 }
-(() => { (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(SharedResizeObserver, [{
-        type: Injectable,
-        args: [{
-                providedIn: 'root',
-            }]
-    }], () => [], null); })();
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: SharedResizeObserver, decorators: [{
+            type: Injectable,
+            args: [{
+                    providedIn: 'root',
+                }]
+        }], ctorParameters: () => [] });
 
 /** An injion token for the parent form-field. */
 const FLOATING_LABEL_PARENT = new InjectionToken('FloatingLabelParent');
@@ -6499,7 +6985,7 @@ class MatFormField {
         return this._hideRequiredMarker;
     }
     set hideRequiredMarker(value) {
-        this._hideRequiredMarker = coerceBooleanProperty(value);
+        this._hideRequiredMarker = coerceBooleanProperty$1(value);
     }
     /** Whether the label should always float or float as the user types. */
     get floatLabel() {
@@ -6931,7 +7417,7 @@ class MatFormField {
         // shadow DOM, however browser that support shadow DOM should support `getRootNode` as well.
         return document.documentElement.contains(element);
     }
-    static { this.ɵfac = function MatFormField_Factory(t) { return new (t || MatFormField)(i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.ChangeDetectorRef), i0.ɵɵdirectiveInject(i0.NgZone), i0.ɵɵdirectiveInject(Directionality), i0.ɵɵdirectiveInject(Platform), i0.ɵɵdirectiveInject(MAT_FORM_FIELD_DEFAULT_OPTIONS, 8), i0.ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8), i0.ɵɵdirectiveInject(DOCUMENT)); }; }
+    static { this.ɵfac = function MatFormField_Factory(t) { return new (t || MatFormField)(i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(i0.ChangeDetectorRef), i0.ɵɵdirectiveInject(i0.NgZone), i0.ɵɵdirectiveInject(Directionality), i0.ɵɵdirectiveInject(Platform$1), i0.ɵɵdirectiveInject(MAT_FORM_FIELD_DEFAULT_OPTIONS, 8), i0.ɵɵdirectiveInject(ANIMATION_MODULE_TYPE, 8), i0.ɵɵdirectiveInject(DOCUMENT)); }; }
     static { this.ɵcmp = /*@__PURE__*/ i0.ɵɵdefineComponent({ type: MatFormField, selectors: [["mat-form-field"]], contentQueries: function MatFormField_ContentQueries(rf, ctx, dirIndex) { if (rf & 1) {
             i0.ɵɵcontentQuery(dirIndex, MatLabel, 5);
             i0.ɵɵcontentQuery(dirIndex, MatLabel, 7);
@@ -7056,7 +7542,7 @@ class MatFormField {
                     MatFormFieldLineRipple,
                     MatHint,
                 ], template: "<ng-template #labelTemplate>\r\n  <!--\r\n    MDC recommends that the text-field is a `<label>` element. This rather complicates the\r\n    setup because it would require every form-field control to explicitly set `aria-labelledby`.\r\n    This is because the `<label>` itself contains more than the actual label (e.g. prefix, suffix\r\n    or other projected content), and screen readers could potentially read out undesired content.\r\n    Excluding elements from being printed out requires them to be marked with `aria-hidden`, or\r\n    the form control is set to a scoped element for the label (using `aria-labelledby`). Both of\r\n    these options seem to complicate the setup because we know exactly what content is rendered\r\n    as part of the label, and we don't want to spend resources on walking through projected content\r\n    to set `aria-hidden`. Nor do we want to set `aria-labelledby` on every form control if we could\r\n    simply link the label to the control using the label `for` attribute.\r\n  -->\r\n  @if (_hasFloatingLabel()) {\r\n    <label matFormFieldFloatingLabel\r\n           [floating]=\"_shouldLabelFloat()\"\r\n           [monitorResize]=\"_hasOutline()\"\r\n           [id]=\"_labelId\"\r\n           [attr.for]=\"_control.id\">\r\n      <ng-content select=\"mat-label\"></ng-content>\r\n      <!--\r\n        We set the required marker as a separate element, in order to make it easier to target if\r\n        apps want to override it and to be able to set `aria-hidden` so that screen readers don't\r\n        pick it up.\r\n       -->\r\n       @if (!hideRequiredMarker && _control.required) {\r\n         <span\r\n           aria-hidden=\"true\"\r\n           class=\"mat-mdc-form-field-required-marker mdc-floating-label--required\"></span>\r\n       }\r\n    </label>\r\n  }\r\n</ng-template>\r\n\r\n<div class=\"mat-mdc-text-field-wrapper mdc-text-field\" #textField\r\n     [class.mdc-text-field--filled]=\"!_hasOutline()\"\r\n     [class.mdc-text-field--outlined]=\"_hasOutline()\"\r\n     [class.mdc-text-field--no-label]=\"!_hasFloatingLabel()\"\r\n     [class.mdc-text-field--disabled]=\"_control.disabled\"\r\n     [class.mdc-text-field--invalid]=\"_control.errorState\"\r\n     (click)=\"_control.onContainerClick($event)\">\r\n  @if (!_hasOutline() && !_control.disabled) {\r\n    <div class=\"mat-mdc-form-field-focus-overlay\"></div>\r\n  }\r\n  <div class=\"mat-mdc-form-field-flex\">\r\n    @if (_hasOutline()) {\r\n      <div matFormFieldNotchedOutline [matFormFieldNotchedOutlineOpen]=\"_shouldLabelFloat()\">\r\n        @if (!_forceDisplayInfixLabel()) {\r\n          <ng-template [ngTemplateOutlet]=\"labelTemplate\"></ng-template>\r\n        }\r\n      </div>\r\n    }\r\n\r\n    @if (_hasIconPrefix) {\r\n      <div class=\"mat-mdc-form-field-icon-prefix\" #iconPrefixContainer>\r\n        <ng-content select=\"[matPrefix], [matIconPrefix]\"></ng-content>\r\n      </div>\r\n    }\r\n\r\n    @if (_hasTextPrefix) {\r\n      <div class=\"mat-mdc-form-field-text-prefix\" #textPrefixContainer>\r\n        <ng-content select=\"[matTextPrefix]\"></ng-content>\r\n      </div>\r\n    }\r\n\r\n    <div class=\"mat-mdc-form-field-infix\">\r\n      @if (!_hasOutline() || _forceDisplayInfixLabel()) {\r\n        <ng-template [ngTemplateOutlet]=\"labelTemplate\"></ng-template>\r\n      }\r\n\r\n      <ng-content></ng-content>\r\n    </div>\r\n\r\n    @if (_hasTextSuffix) {\r\n      <div class=\"mat-mdc-form-field-text-suffix\">\r\n        <ng-content select=\"[matTextSuffix]\"></ng-content>\r\n      </div>\r\n    }\r\n\r\n    @if (_hasIconSuffix) {\r\n      <div class=\"mat-mdc-form-field-icon-suffix\">\r\n        <ng-content select=\"[matSuffix], [matIconSuffix]\"></ng-content>\r\n      </div>\r\n    }\r\n  </div>\r\n\r\n  @if (!_hasOutline()) {\r\n    <div matFormFieldLineRipple></div>\r\n  }\r\n</div>\r\n\r\n<div class=\"mat-mdc-form-field-subscript-wrapper mat-mdc-form-field-bottom-align\"\r\n     [class.mat-mdc-form-field-subscript-dynamic-size]=\"subscriptSizing === 'dynamic'\">\r\n\r\n  @switch (_getDisplayedMessages()) {\r\n    @case ('error') {\r\n      <div class=\"mat-mdc-form-field-error-wrapper\"\r\n           [@transitionMessages]=\"_subscriptAnimationState\">\r\n        <ng-content select=\"mat-error, [matError]\"></ng-content>\r\n      </div>\r\n    }\r\n\r\n    @case ('hint') {\r\n      <div class=\"mat-mdc-form-field-hint-wrapper\" [@transitionMessages]=\"_subscriptAnimationState\">\r\n        @if (hintLabel) {\r\n          <mat-hint [id]=\"_hintLabelId\">{{hintLabel}}</mat-hint>\r\n        }\r\n        <ng-content select=\"mat-hint:not([align='end'])\"></ng-content>\r\n        <div class=\"mat-mdc-form-field-hint-spacer\"></div>\r\n        <ng-content select=\"mat-hint[align='end']\"></ng-content>\r\n      </div>\r\n    }\r\n  }\r\n</div>\r\n", styles: [".mdc-text-field{border-top-left-radius:4px;border-top-left-radius:var(--mdc-shape-small, 4px);border-top-right-radius:4px;border-top-right-radius:var(--mdc-shape-small, 4px);border-bottom-right-radius:0;border-bottom-left-radius:0;display:inline-flex;align-items:baseline;padding:0 16px;position:relative;box-sizing:border-box;overflow:hidden;will-change:opacity,transform,color}.mdc-text-field .mdc-floating-label{top:50%;transform:translateY(-50%);pointer-events:none}.mdc-text-field__input{height:28px;width:100%;min-width:0;border:none;border-radius:0;background:none;appearance:none;padding:0}.mdc-text-field__input::-ms-clear{display:none}.mdc-text-field__input::-webkit-calendar-picker-indicator{display:none}.mdc-text-field__input:focus{outline:none}.mdc-text-field__input:invalid{box-shadow:none}@media all{.mdc-text-field__input::placeholder{opacity:0}}@media all{.mdc-text-field__input:-ms-input-placeholder{opacity:0}}@media all{.mdc-text-field--no-label .mdc-text-field__input::placeholder,.mdc-text-field--focused .mdc-text-field__input::placeholder{opacity:1}}@media all{.mdc-text-field--no-label .mdc-text-field__input:-ms-input-placeholder,.mdc-text-field--focused .mdc-text-field__input:-ms-input-placeholder{opacity:1}}.mdc-text-field__affix{height:28px;opacity:0;white-space:nowrap}.mdc-text-field--label-floating .mdc-text-field__affix,.mdc-text-field--no-label .mdc-text-field__affix{opacity:1}@supports(-webkit-hyphens: none){.mdc-text-field--outlined .mdc-text-field__affix{align-items:center;align-self:center;display:inline-flex;height:100%}}.mdc-text-field__affix--prefix{padding-left:0;padding-right:2px}[dir=rtl] .mdc-text-field__affix--prefix,.mdc-text-field__affix--prefix[dir=rtl]{padding-left:2px;padding-right:0}.mdc-text-field--end-aligned .mdc-text-field__affix--prefix{padding-left:0;padding-right:12px}[dir=rtl] .mdc-text-field--end-aligned .mdc-text-field__affix--prefix,.mdc-text-field--end-aligned .mdc-text-field__affix--prefix[dir=rtl]{padding-left:12px;padding-right:0}.mdc-text-field__affix--suffix{padding-left:12px;padding-right:0}[dir=rtl] .mdc-text-field__affix--suffix,.mdc-text-field__affix--suffix[dir=rtl]{padding-left:0;padding-right:12px}.mdc-text-field--end-aligned .mdc-text-field__affix--suffix{padding-left:2px;padding-right:0}[dir=rtl] .mdc-text-field--end-aligned .mdc-text-field__affix--suffix,.mdc-text-field--end-aligned .mdc-text-field__affix--suffix[dir=rtl]{padding-left:0;padding-right:2px}.mdc-text-field--filled{height:56px}.mdc-text-field--filled::before{display:inline-block;width:0;height:40px;content:\"\";vertical-align:0}.mdc-text-field--filled .mdc-floating-label{left:16px;right:initial}[dir=rtl] .mdc-text-field--filled .mdc-floating-label,.mdc-text-field--filled .mdc-floating-label[dir=rtl]{left:initial;right:16px}.mdc-text-field--filled .mdc-floating-label--float-above{transform:translateY(-106%) scale(0.75)}.mdc-text-field--filled.mdc-text-field--no-label .mdc-text-field__input{height:100%}.mdc-text-field--filled.mdc-text-field--no-label .mdc-floating-label{display:none}.mdc-text-field--filled.mdc-text-field--no-label::before{display:none}@supports(-webkit-hyphens: none){.mdc-text-field--filled.mdc-text-field--no-label .mdc-text-field__affix{align-items:center;align-self:center;display:inline-flex;height:100%}}.mdc-text-field--outlined{height:56px;overflow:visible}.mdc-text-field--outlined .mdc-floating-label--float-above{transform:translateY(-37.25px) scale(1)}.mdc-text-field--outlined .mdc-floating-label--float-above{font-size:.75rem}.mdc-text-field--outlined.mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above{transform:translateY(-34.75px) scale(0.75)}.mdc-text-field--outlined.mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above{font-size:1rem}.mdc-text-field--outlined .mdc-text-field__input{height:100%}.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading{border-top-left-radius:4px;border-top-left-radius:var(--mdc-shape-small, 4px);border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:4px;border-bottom-left-radius:var(--mdc-shape-small, 4px)}[dir=rtl] .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading,.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading[dir=rtl]{border-top-left-radius:0;border-top-right-radius:4px;border-top-right-radius:var(--mdc-shape-small, 4px);border-bottom-right-radius:4px;border-bottom-right-radius:var(--mdc-shape-small, 4px);border-bottom-left-radius:0}@supports(top: max(0%)){.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading{width:max(12px,var(--mdc-shape-small, 4px))}}@supports(top: max(0%)){.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__notch{max-width:calc(100% - max(12px,var(--mdc-shape-small, 4px))*2)}}.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing{border-top-left-radius:0;border-top-right-radius:4px;border-top-right-radius:var(--mdc-shape-small, 4px);border-bottom-right-radius:4px;border-bottom-right-radius:var(--mdc-shape-small, 4px);border-bottom-left-radius:0}[dir=rtl] .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing,.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing[dir=rtl]{border-top-left-radius:4px;border-top-left-radius:var(--mdc-shape-small, 4px);border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:4px;border-bottom-left-radius:var(--mdc-shape-small, 4px)}@supports(top: max(0%)){.mdc-text-field--outlined{padding-left:max(16px,calc(var(--mdc-shape-small, 4px) + 4px))}}@supports(top: max(0%)){.mdc-text-field--outlined{padding-right:max(16px,var(--mdc-shape-small, 4px))}}@supports(top: max(0%)){.mdc-text-field--outlined+.mdc-text-field-helper-line{padding-left:max(16px,calc(var(--mdc-shape-small, 4px) + 4px))}}@supports(top: max(0%)){.mdc-text-field--outlined+.mdc-text-field-helper-line{padding-right:max(16px,var(--mdc-shape-small, 4px))}}.mdc-text-field--outlined.mdc-text-field--with-leading-icon{padding-left:0}@supports(top: max(0%)){.mdc-text-field--outlined.mdc-text-field--with-leading-icon{padding-right:max(16px,var(--mdc-shape-small, 4px))}}[dir=rtl] .mdc-text-field--outlined.mdc-text-field--with-leading-icon,.mdc-text-field--outlined.mdc-text-field--with-leading-icon[dir=rtl]{padding-right:0}@supports(top: max(0%)){[dir=rtl] .mdc-text-field--outlined.mdc-text-field--with-leading-icon,.mdc-text-field--outlined.mdc-text-field--with-leading-icon[dir=rtl]{padding-left:max(16px,var(--mdc-shape-small, 4px))}}.mdc-text-field--outlined.mdc-text-field--with-trailing-icon{padding-right:0}@supports(top: max(0%)){.mdc-text-field--outlined.mdc-text-field--with-trailing-icon{padding-left:max(16px,calc(var(--mdc-shape-small, 4px) + 4px))}}[dir=rtl] .mdc-text-field--outlined.mdc-text-field--with-trailing-icon,.mdc-text-field--outlined.mdc-text-field--with-trailing-icon[dir=rtl]{padding-left:0}@supports(top: max(0%)){[dir=rtl] .mdc-text-field--outlined.mdc-text-field--with-trailing-icon,.mdc-text-field--outlined.mdc-text-field--with-trailing-icon[dir=rtl]{padding-right:max(16px,calc(var(--mdc-shape-small, 4px) + 4px))}}.mdc-text-field--outlined.mdc-text-field--with-leading-icon.mdc-text-field--with-trailing-icon{padding-left:0;padding-right:0}.mdc-text-field--outlined .mdc-notched-outline--notched .mdc-notched-outline__notch{padding-top:1px}.mdc-text-field--outlined .mdc-floating-label{left:4px;right:initial}[dir=rtl] .mdc-text-field--outlined .mdc-floating-label,.mdc-text-field--outlined .mdc-floating-label[dir=rtl]{left:initial;right:4px}.mdc-text-field--outlined .mdc-text-field__input{display:flex;border:none !important;background-color:rgba(0,0,0,0)}.mdc-text-field--outlined .mdc-notched-outline{z-index:1}.mdc-text-field--textarea{flex-direction:column;align-items:center;width:auto;height:auto;padding:0}.mdc-text-field--textarea .mdc-floating-label{top:19px}.mdc-text-field--textarea .mdc-floating-label:not(.mdc-floating-label--float-above){transform:none}.mdc-text-field--textarea .mdc-text-field__input{flex-grow:1;height:auto;min-height:1.5rem;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;resize:none;padding:0 16px}.mdc-text-field--textarea.mdc-text-field--filled::before{display:none}.mdc-text-field--textarea.mdc-text-field--filled .mdc-floating-label--float-above{transform:translateY(-10.25px) scale(0.75)}.mdc-text-field--textarea.mdc-text-field--filled .mdc-text-field__input{margin-top:23px;margin-bottom:9px}.mdc-text-field--textarea.mdc-text-field--filled.mdc-text-field--no-label .mdc-text-field__input{margin-top:16px;margin-bottom:16px}.mdc-text-field--textarea.mdc-text-field--outlined .mdc-notched-outline--notched .mdc-notched-outline__notch{padding-top:0}.mdc-text-field--textarea.mdc-text-field--outlined .mdc-floating-label--float-above{transform:translateY(-27.25px) scale(1)}.mdc-text-field--textarea.mdc-text-field--outlined .mdc-floating-label--float-above{font-size:.75rem}.mdc-text-field--textarea.mdc-text-field--outlined.mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-text-field--textarea.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above{transform:translateY(-24.75px) scale(0.75)}.mdc-text-field--textarea.mdc-text-field--outlined.mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-text-field--textarea.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above{font-size:1rem}.mdc-text-field--textarea.mdc-text-field--outlined .mdc-text-field__input{margin-top:16px;margin-bottom:16px}.mdc-text-field--textarea.mdc-text-field--outlined .mdc-floating-label{top:18px}.mdc-text-field--textarea.mdc-text-field--with-internal-counter .mdc-text-field__input{margin-bottom:2px}.mdc-text-field--textarea.mdc-text-field--with-internal-counter .mdc-text-field-character-counter{align-self:flex-end;padding:0 16px}.mdc-text-field--textarea.mdc-text-field--with-internal-counter .mdc-text-field-character-counter::after{display:inline-block;width:0;height:16px;content:\"\";vertical-align:-16px}.mdc-text-field--textarea.mdc-text-field--with-internal-counter .mdc-text-field-character-counter::before{display:none}.mdc-text-field__resizer{align-self:stretch;display:inline-flex;flex-direction:column;flex-grow:1;max-height:100%;max-width:100%;min-height:56px;min-width:fit-content;min-width:-moz-available;min-width:-webkit-fill-available;overflow:hidden;resize:both}.mdc-text-field--filled .mdc-text-field__resizer{transform:translateY(-1px)}.mdc-text-field--filled .mdc-text-field__resizer .mdc-text-field__input,.mdc-text-field--filled .mdc-text-field__resizer .mdc-text-field-character-counter{transform:translateY(1px)}.mdc-text-field--outlined .mdc-text-field__resizer{transform:translateX(-1px) translateY(-1px)}[dir=rtl] .mdc-text-field--outlined .mdc-text-field__resizer,.mdc-text-field--outlined .mdc-text-field__resizer[dir=rtl]{transform:translateX(1px) translateY(-1px)}.mdc-text-field--outlined .mdc-text-field__resizer .mdc-text-field__input,.mdc-text-field--outlined .mdc-text-field__resizer .mdc-text-field-character-counter{transform:translateX(1px) translateY(1px)}[dir=rtl] .mdc-text-field--outlined .mdc-text-field__resizer .mdc-text-field__input,[dir=rtl] .mdc-text-field--outlined .mdc-text-field__resizer .mdc-text-field-character-counter,.mdc-text-field--outlined .mdc-text-field__resizer .mdc-text-field__input[dir=rtl],.mdc-text-field--outlined .mdc-text-field__resizer .mdc-text-field-character-counter[dir=rtl]{transform:translateX(-1px) translateY(1px)}.mdc-text-field--with-leading-icon{padding-left:0;padding-right:16px}[dir=rtl] .mdc-text-field--with-leading-icon,.mdc-text-field--with-leading-icon[dir=rtl]{padding-left:16px;padding-right:0}.mdc-text-field--with-leading-icon.mdc-text-field--filled .mdc-floating-label{max-width:calc(100% - 48px);left:48px;right:initial}[dir=rtl] .mdc-text-field--with-leading-icon.mdc-text-field--filled .mdc-floating-label,.mdc-text-field--with-leading-icon.mdc-text-field--filled .mdc-floating-label[dir=rtl]{left:initial;right:48px}.mdc-text-field--with-leading-icon.mdc-text-field--filled .mdc-floating-label--float-above{max-width:calc(100%/0.75 - 64px/0.75)}.mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-floating-label{left:36px;right:initial}[dir=rtl] .mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-floating-label,.mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-floating-label[dir=rtl]{left:initial;right:36px}.mdc-text-field--with-leading-icon.mdc-text-field--outlined :not(.mdc-notched-outline--notched) .mdc-notched-outline__notch{max-width:calc(100% - 60px)}.mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-floating-label--float-above{transform:translateY(-37.25px) translateX(-32px) scale(1)}[dir=rtl] .mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-floating-label--float-above,.mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-floating-label--float-above[dir=rtl]{transform:translateY(-37.25px) translateX(32px) scale(1)}.mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-floating-label--float-above{font-size:.75rem}.mdc-text-field--with-leading-icon.mdc-text-field--outlined.mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above{transform:translateY(-34.75px) translateX(-32px) scale(0.75)}[dir=rtl] .mdc-text-field--with-leading-icon.mdc-text-field--outlined.mdc-notched-outline--upgraded .mdc-floating-label--float-above,[dir=rtl] .mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-text-field--with-leading-icon.mdc-text-field--outlined.mdc-notched-outline--upgraded .mdc-floating-label--float-above[dir=rtl],.mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above[dir=rtl]{transform:translateY(-34.75px) translateX(32px) scale(0.75)}.mdc-text-field--with-leading-icon.mdc-text-field--outlined.mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above{font-size:1rem}.mdc-text-field--with-trailing-icon{padding-left:16px;padding-right:0}[dir=rtl] .mdc-text-field--with-trailing-icon,.mdc-text-field--with-trailing-icon[dir=rtl]{padding-left:0;padding-right:16px}.mdc-text-field--with-trailing-icon.mdc-text-field--filled .mdc-floating-label{max-width:calc(100% - 64px)}.mdc-text-field--with-trailing-icon.mdc-text-field--filled .mdc-floating-label--float-above{max-width:calc(100%/0.75 - 64px/0.75)}.mdc-text-field--with-trailing-icon.mdc-text-field--outlined :not(.mdc-notched-outline--notched) .mdc-notched-outline__notch{max-width:calc(100% - 60px)}.mdc-text-field--with-leading-icon.mdc-text-field--with-trailing-icon{padding-left:0;padding-right:0}.mdc-text-field--with-leading-icon.mdc-text-field--with-trailing-icon.mdc-text-field--filled .mdc-floating-label{max-width:calc(100% - 96px)}.mdc-text-field--with-leading-icon.mdc-text-field--with-trailing-icon.mdc-text-field--filled .mdc-floating-label--float-above{max-width:calc(100%/0.75 - 96px/0.75)}.mdc-text-field-helper-line{display:flex;justify-content:space-between;box-sizing:border-box}.mdc-text-field+.mdc-text-field-helper-line{padding-right:16px;padding-left:16px}.mdc-form-field>.mdc-text-field+label{align-self:flex-start}.mdc-text-field--focused .mdc-notched-outline__leading,.mdc-text-field--focused .mdc-notched-outline__notch,.mdc-text-field--focused .mdc-notched-outline__trailing{border-width:2px}.mdc-text-field--focused+.mdc-text-field-helper-line .mdc-text-field-helper-text:not(.mdc-text-field-helper-text--validation-msg){opacity:1}.mdc-text-field--focused.mdc-text-field--outlined .mdc-notched-outline--notched .mdc-notched-outline__notch{padding-top:2px}.mdc-text-field--focused.mdc-text-field--outlined.mdc-text-field--textarea .mdc-notched-outline--notched .mdc-notched-outline__notch{padding-top:0}.mdc-text-field--invalid+.mdc-text-field-helper-line .mdc-text-field-helper-text--validation-msg{opacity:1}.mdc-text-field--disabled{pointer-events:none}@media screen and (forced-colors: active){.mdc-text-field--disabled .mdc-text-field__input{background-color:Window}.mdc-text-field--disabled .mdc-floating-label{z-index:1}}.mdc-text-field--disabled .mdc-floating-label{cursor:default}.mdc-text-field--disabled.mdc-text-field--filled .mdc-text-field__ripple{display:none}.mdc-text-field--disabled .mdc-text-field__input{pointer-events:auto}.mdc-text-field--end-aligned .mdc-text-field__input{text-align:right}[dir=rtl] .mdc-text-field--end-aligned .mdc-text-field__input,.mdc-text-field--end-aligned .mdc-text-field__input[dir=rtl]{text-align:left}[dir=rtl] .mdc-text-field--ltr-text .mdc-text-field__input,[dir=rtl] .mdc-text-field--ltr-text .mdc-text-field__affix,.mdc-text-field--ltr-text[dir=rtl] .mdc-text-field__input,.mdc-text-field--ltr-text[dir=rtl] .mdc-text-field__affix{direction:ltr}[dir=rtl] .mdc-text-field--ltr-text .mdc-text-field__affix--prefix,.mdc-text-field--ltr-text[dir=rtl] .mdc-text-field__affix--prefix{padding-left:0;padding-right:2px}[dir=rtl] .mdc-text-field--ltr-text .mdc-text-field__affix--suffix,.mdc-text-field--ltr-text[dir=rtl] .mdc-text-field__affix--suffix{padding-left:12px;padding-right:0}[dir=rtl] .mdc-text-field--ltr-text .mdc-text-field__icon--leading,.mdc-text-field--ltr-text[dir=rtl] .mdc-text-field__icon--leading{order:1}[dir=rtl] .mdc-text-field--ltr-text .mdc-text-field__affix--suffix,.mdc-text-field--ltr-text[dir=rtl] .mdc-text-field__affix--suffix{order:2}[dir=rtl] .mdc-text-field--ltr-text .mdc-text-field__input,.mdc-text-field--ltr-text[dir=rtl] .mdc-text-field__input{order:3}[dir=rtl] .mdc-text-field--ltr-text .mdc-text-field__affix--prefix,.mdc-text-field--ltr-text[dir=rtl] .mdc-text-field__affix--prefix{order:4}[dir=rtl] .mdc-text-field--ltr-text .mdc-text-field__icon--trailing,.mdc-text-field--ltr-text[dir=rtl] .mdc-text-field__icon--trailing{order:5}[dir=rtl] .mdc-text-field--ltr-text.mdc-text-field--end-aligned .mdc-text-field__input,.mdc-text-field--ltr-text.mdc-text-field--end-aligned[dir=rtl] .mdc-text-field__input{text-align:right}[dir=rtl] .mdc-text-field--ltr-text.mdc-text-field--end-aligned .mdc-text-field__affix--prefix,.mdc-text-field--ltr-text.mdc-text-field--end-aligned[dir=rtl] .mdc-text-field__affix--prefix{padding-right:12px}[dir=rtl] .mdc-text-field--ltr-text.mdc-text-field--end-aligned .mdc-text-field__affix--suffix,.mdc-text-field--ltr-text.mdc-text-field--end-aligned[dir=rtl] .mdc-text-field__affix--suffix{padding-left:2px}.mdc-floating-label{position:absolute;left:0;-webkit-transform-origin:left top;transform-origin:left top;line-height:1.15rem;text-align:left;text-overflow:ellipsis;white-space:nowrap;cursor:text;overflow:hidden;will-change:transform}[dir=rtl] .mdc-floating-label,.mdc-floating-label[dir=rtl]{right:0;left:auto;-webkit-transform-origin:right top;transform-origin:right top;text-align:right}.mdc-floating-label--float-above{cursor:auto}.mdc-floating-label--required:not(.mdc-floating-label--hide-required-marker)::after{margin-left:1px;margin-right:0px;content:\"*\"}[dir=rtl] .mdc-floating-label--required:not(.mdc-floating-label--hide-required-marker)::after,.mdc-floating-label--required:not(.mdc-floating-label--hide-required-marker)[dir=rtl]::after{margin-left:0;margin-right:1px}.mdc-notched-outline{display:flex;position:absolute;top:0;right:0;left:0;box-sizing:border-box;width:100%;max-width:100%;height:100%;text-align:left;pointer-events:none}[dir=rtl] .mdc-notched-outline,.mdc-notched-outline[dir=rtl]{text-align:right}.mdc-notched-outline__leading,.mdc-notched-outline__notch,.mdc-notched-outline__trailing{box-sizing:border-box;height:100%;pointer-events:none}.mdc-notched-outline__trailing{flex-grow:1}.mdc-notched-outline__notch{flex:0 0 auto;width:auto}.mdc-notched-outline .mdc-floating-label{display:inline-block;position:relative;max-width:100%}.mdc-notched-outline .mdc-floating-label--float-above{text-overflow:clip}.mdc-notched-outline--upgraded .mdc-floating-label--float-above{max-width:133.3333333333%}.mdc-notched-outline--notched .mdc-notched-outline__notch{padding-left:0;padding-right:8px;border-top:none}[dir=rtl] .mdc-notched-outline--notched .mdc-notched-outline__notch,.mdc-notched-outline--notched .mdc-notched-outline__notch[dir=rtl]{padding-left:8px;padding-right:0}.mdc-notched-outline--no-label .mdc-notched-outline__notch{display:none}.mdc-line-ripple::before,.mdc-line-ripple::after{position:absolute;bottom:0;left:0;width:100%;border-bottom-style:solid;content:\"\"}.mdc-line-ripple::before{z-index:1}.mdc-line-ripple::after{transform:scaleX(0);opacity:0;z-index:2}.mdc-line-ripple--active::after{transform:scaleX(1);opacity:1}.mdc-line-ripple--deactivating::after{opacity:0}.mdc-floating-label--float-above{transform:translateY(-106%) scale(0.75)}.mdc-notched-outline__leading,.mdc-notched-outline__notch,.mdc-notched-outline__trailing{border-top:1px solid;border-bottom:1px solid}.mdc-notched-outline__leading{border-left:1px solid;border-right:none;width:12px}[dir=rtl] .mdc-notched-outline__leading,.mdc-notched-outline__leading[dir=rtl]{border-left:none;border-right:1px solid}.mdc-notched-outline__trailing{border-left:none;border-right:1px solid}[dir=rtl] .mdc-notched-outline__trailing,.mdc-notched-outline__trailing[dir=rtl]{border-left:1px solid;border-right:none}.mdc-notched-outline__notch{max-width:calc(100% - 12px*2)}.mdc-line-ripple::before{border-bottom-width:1px}.mdc-line-ripple::after{border-bottom-width:2px}.mdc-text-field--filled{border-top-left-radius:var(--mdc-filled-text-field-container-shape);border-top-right-radius:var(--mdc-filled-text-field-container-shape);border-bottom-right-radius:0;border-bottom-left-radius:0}.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input{caret-color:var(--mdc-filled-text-field-caret-color)}.mdc-text-field--filled.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__input{caret-color:var(--mdc-filled-text-field-error-caret-color)}.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input{color:var(--mdc-filled-text-field-input-text-color)}.mdc-text-field--filled.mdc-text-field--disabled .mdc-text-field__input{color:var(--mdc-filled-text-field-disabled-input-text-color)}.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label,.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-floating-label--float-above{color:var(--mdc-filled-text-field-label-text-color)}.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label,.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label--float-above{color:var(--mdc-filled-text-field-focus-label-text-color)}.mdc-text-field--filled.mdc-text-field--disabled .mdc-floating-label,.mdc-text-field--filled.mdc-text-field--disabled .mdc-floating-label--float-above{color:var(--mdc-filled-text-field-disabled-label-text-color)}.mdc-text-field--filled.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-floating-label,.mdc-text-field--filled.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-floating-label--float-above{color:var(--mdc-filled-text-field-error-label-text-color)}.mdc-text-field--filled.mdc-text-field--invalid:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label,.mdc-text-field--filled.mdc-text-field--invalid:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label--float-above{color:var(--mdc-filled-text-field-error-focus-label-text-color)}.mdc-text-field--filled .mdc-floating-label{font-family:var(--mdc-filled-text-field-label-text-font);font-size:var(--mdc-filled-text-field-label-text-size);font-weight:var(--mdc-filled-text-field-label-text-weight);letter-spacing:var(--mdc-filled-text-field-label-text-tracking)}@media all{.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input::placeholder{color:var(--mdc-filled-text-field-input-text-placeholder-color)}}@media all{.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input:-ms-input-placeholder{color:var(--mdc-filled-text-field-input-text-placeholder-color)}}.mdc-text-field--filled:not(.mdc-text-field--disabled){background-color:var(--mdc-filled-text-field-container-color)}.mdc-text-field--filled.mdc-text-field--disabled{background-color:var(--mdc-filled-text-field-disabled-container-color)}.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before{border-bottom-color:var(--mdc-filled-text-field-active-indicator-color)}.mdc-text-field--filled:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-line-ripple::before{border-bottom-color:var(--mdc-filled-text-field-hover-active-indicator-color)}.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after{border-bottom-color:var(--mdc-filled-text-field-focus-active-indicator-color)}.mdc-text-field--filled.mdc-text-field--disabled .mdc-line-ripple::before{border-bottom-color:var(--mdc-filled-text-field-disabled-active-indicator-color)}.mdc-text-field--filled.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-line-ripple::before{border-bottom-color:var(--mdc-filled-text-field-error-active-indicator-color)}.mdc-text-field--filled.mdc-text-field--invalid:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-line-ripple::before{border-bottom-color:var(--mdc-filled-text-field-error-hover-active-indicator-color)}.mdc-text-field--filled.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-line-ripple::after{border-bottom-color:var(--mdc-filled-text-field-error-focus-active-indicator-color)}.mdc-text-field--filled .mdc-line-ripple::before{border-bottom-width:var(--mdc-filled-text-field-active-indicator-height)}.mdc-text-field--filled .mdc-line-ripple::after{border-bottom-width:var(--mdc-filled-text-field-focus-active-indicator-height)}.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input{caret-color:var(--mdc-outlined-text-field-caret-color)}.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-text-field__input{caret-color:var(--mdc-outlined-text-field-error-caret-color)}.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input{color:var(--mdc-outlined-text-field-input-text-color)}.mdc-text-field--outlined.mdc-text-field--disabled .mdc-text-field__input{color:var(--mdc-outlined-text-field-disabled-input-text-color)}.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-floating-label,.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-floating-label--float-above{color:var(--mdc-outlined-text-field-label-text-color)}.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label,.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label--float-above{color:var(--mdc-outlined-text-field-focus-label-text-color)}.mdc-text-field--outlined.mdc-text-field--disabled .mdc-floating-label,.mdc-text-field--outlined.mdc-text-field--disabled .mdc-floating-label--float-above{color:var(--mdc-outlined-text-field-disabled-label-text-color)}.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-floating-label,.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-floating-label--float-above{color:var(--mdc-outlined-text-field-error-label-text-color)}.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label,.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label--float-above{color:var(--mdc-outlined-text-field-error-focus-label-text-color)}.mdc-text-field--outlined .mdc-floating-label{font-family:var(--mdc-outlined-text-field-label-text-font);font-size:var(--mdc-outlined-text-field-label-text-size);font-weight:var(--mdc-outlined-text-field-label-text-weight);letter-spacing:var(--mdc-outlined-text-field-label-text-tracking)}@media all{.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input::placeholder{color:var(--mdc-outlined-text-field-input-text-placeholder-color)}}@media all{.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input:-ms-input-placeholder{color:var(--mdc-outlined-text-field-input-text-placeholder-color)}}.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading{border-top-left-radius:var(--mdc-outlined-text-field-container-shape);border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:var(--mdc-outlined-text-field-container-shape)}[dir=rtl] .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading,.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading[dir=rtl]{border-top-left-radius:0;border-top-right-radius:var(--mdc-outlined-text-field-container-shape);border-bottom-right-radius:var(--mdc-outlined-text-field-container-shape);border-bottom-left-radius:0}@supports(top: max(0%)){.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading{width:max(12px,var(--mdc-outlined-text-field-container-shape))}}@supports(top: max(0%)){.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__notch{max-width:calc(100% - max(12px,var(--mdc-outlined-text-field-container-shape))*2)}}.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing{border-top-left-radius:0;border-top-right-radius:var(--mdc-outlined-text-field-container-shape);border-bottom-right-radius:var(--mdc-outlined-text-field-container-shape);border-bottom-left-radius:0}[dir=rtl] .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing,.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing[dir=rtl]{border-top-left-radius:var(--mdc-outlined-text-field-container-shape);border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:var(--mdc-outlined-text-field-container-shape)}@supports(top: max(0%)){.mdc-text-field--outlined{padding-left:max(16px,calc(var(--mdc-outlined-text-field-container-shape) + 4px))}}@supports(top: max(0%)){.mdc-text-field--outlined{padding-right:max(16px,var(--mdc-outlined-text-field-container-shape))}}@supports(top: max(0%)){.mdc-text-field--outlined+.mdc-text-field-helper-line{padding-left:max(16px,calc(var(--mdc-outlined-text-field-container-shape) + 4px))}}@supports(top: max(0%)){.mdc-text-field--outlined+.mdc-text-field-helper-line{padding-right:max(16px,var(--mdc-outlined-text-field-container-shape))}}.mdc-text-field--outlined.mdc-text-field--with-leading-icon{padding-left:0}@supports(top: max(0%)){.mdc-text-field--outlined.mdc-text-field--with-leading-icon{padding-right:max(16px,var(--mdc-outlined-text-field-container-shape))}}[dir=rtl] .mdc-text-field--outlined.mdc-text-field--with-leading-icon,.mdc-text-field--outlined.mdc-text-field--with-leading-icon[dir=rtl]{padding-right:0}@supports(top: max(0%)){[dir=rtl] .mdc-text-field--outlined.mdc-text-field--with-leading-icon,.mdc-text-field--outlined.mdc-text-field--with-leading-icon[dir=rtl]{padding-left:max(16px,var(--mdc-outlined-text-field-container-shape))}}.mdc-text-field--outlined.mdc-text-field--with-trailing-icon{padding-right:0}@supports(top: max(0%)){.mdc-text-field--outlined.mdc-text-field--with-trailing-icon{padding-left:max(16px,calc(var(--mdc-outlined-text-field-container-shape) + 4px))}}[dir=rtl] .mdc-text-field--outlined.mdc-text-field--with-trailing-icon,.mdc-text-field--outlined.mdc-text-field--with-trailing-icon[dir=rtl]{padding-left:0}@supports(top: max(0%)){[dir=rtl] .mdc-text-field--outlined.mdc-text-field--with-trailing-icon,.mdc-text-field--outlined.mdc-text-field--with-trailing-icon[dir=rtl]{padding-right:max(16px,calc(var(--mdc-outlined-text-field-container-shape) + 4px))}}.mdc-text-field--outlined.mdc-text-field--with-leading-icon.mdc-text-field--with-trailing-icon{padding-left:0;padding-right:0}.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing{border-color:var(--mdc-outlined-text-field-outline-color)}.mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-notched-outline .mdc-notched-outline__leading,.mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-notched-outline .mdc-notched-outline__notch,.mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-notched-outline .mdc-notched-outline__trailing{border-color:var(--mdc-outlined-text-field-hover-outline-color)}.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing{border-color:var(--mdc-outlined-text-field-focus-outline-color)}.mdc-text-field--outlined.mdc-text-field--disabled .mdc-notched-outline__leading,.mdc-text-field--outlined.mdc-text-field--disabled .mdc-notched-outline__notch,.mdc-text-field--outlined.mdc-text-field--disabled .mdc-notched-outline__trailing{border-color:var(--mdc-outlined-text-field-disabled-outline-color)}.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing{border-color:var(--mdc-outlined-text-field-error-outline-color)}.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-notched-outline .mdc-notched-outline__leading,.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-notched-outline .mdc-notched-outline__notch,.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-notched-outline .mdc-notched-outline__trailing{border-color:var(--mdc-outlined-text-field-error-hover-outline-color)}.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,.mdc-text-field--outlined.mdc-text-field--invalid:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing{border-color:var(--mdc-outlined-text-field-error-focus-outline-color)}.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline .mdc-notched-outline__leading,.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline .mdc-notched-outline__notch,.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline .mdc-notched-outline__trailing{border-width:var(--mdc-outlined-text-field-outline-width)}.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline .mdc-notched-outline__leading,.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline .mdc-notched-outline__notch,.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline .mdc-notched-outline__trailing{border-width:var(--mdc-outlined-text-field-focus-outline-width)}.mat-mdc-form-field-textarea-control{vertical-align:middle;resize:vertical;box-sizing:border-box;height:auto;margin:0;padding:0;border:none;overflow:auto}.mat-mdc-form-field-input-control.mat-mdc-form-field-input-control{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font:inherit;letter-spacing:inherit;text-decoration:inherit;text-transform:inherit;border:none}.mat-mdc-form-field .mat-mdc-floating-label.mdc-floating-label{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;line-height:normal;pointer-events:all}.mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label{cursor:inherit}.mdc-text-field--no-label:not(.mdc-text-field--textarea) .mat-mdc-form-field-input-control.mdc-text-field__input,.mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control{height:auto}.mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control.mdc-text-field__input[type=color]{height:23px}.mat-mdc-text-field-wrapper{height:auto;flex:auto}.mat-mdc-form-field-has-icon-prefix .mat-mdc-text-field-wrapper{padding-left:0;--mat-mdc-form-field-label-offset-x: -16px}.mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper{padding-right:0}[dir=rtl] .mat-mdc-text-field-wrapper{padding-left:16px;padding-right:16px}[dir=rtl] .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper{padding-left:0}[dir=rtl] .mat-mdc-form-field-has-icon-prefix .mat-mdc-text-field-wrapper{padding-right:0}.mat-form-field-disabled .mdc-text-field__input::placeholder{color:var(--mat-form-field-disabled-input-text-placeholder-color)}.mat-form-field-disabled .mdc-text-field__input::-moz-placeholder{color:var(--mat-form-field-disabled-input-text-placeholder-color)}.mat-form-field-disabled .mdc-text-field__input::-webkit-input-placeholder{color:var(--mat-form-field-disabled-input-text-placeholder-color)}.mat-form-field-disabled .mdc-text-field__input:-ms-input-placeholder{color:var(--mat-form-field-disabled-input-text-placeholder-color)}.mat-mdc-form-field-label-always-float .mdc-text-field__input::placeholder{transition-delay:40ms;transition-duration:110ms;opacity:1}.mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .mat-mdc-floating-label{left:auto;right:auto}.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-text-field__input{display:inline-block}.mat-mdc-form-field .mat-mdc-text-field-wrapper.mdc-text-field .mdc-notched-outline__notch{padding-top:0}.mat-mdc-text-field-wrapper::before{content:none}.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline__notch{border-left:1px solid rgba(0,0,0,0)}[dir=rtl] .mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline__notch{border-left:none;border-right:1px solid rgba(0,0,0,0)}.mat-mdc-form-field-subscript-wrapper{box-sizing:border-box;width:100%;position:relative}.mat-mdc-form-field-hint-wrapper,.mat-mdc-form-field-error-wrapper{position:absolute;top:0;left:0;right:0;padding:0 16px}.mat-mdc-form-field-subscript-dynamic-size .mat-mdc-form-field-hint-wrapper,.mat-mdc-form-field-subscript-dynamic-size .mat-mdc-form-field-error-wrapper{position:static}.mat-mdc-form-field-bottom-align::before{content:\"\";display:inline-block;height:16px}.mat-mdc-form-field-bottom-align.mat-mdc-form-field-subscript-dynamic-size::before{content:unset}.mat-mdc-form-field-hint-end{order:1}.mat-mdc-form-field-hint-wrapper{display:flex}.mat-mdc-form-field-hint-spacer{flex:1 0 1em}.mat-mdc-form-field-error{display:block;color:var(--mat-form-field-error-text-color)}.mat-mdc-form-field-subscript-wrapper,.mat-mdc-form-field-bottom-align::before{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:var(--mat-form-field-subscript-text-font);line-height:var(--mat-form-field-subscript-text-line-height);font-size:var(--mat-form-field-subscript-text-size);letter-spacing:var(--mat-form-field-subscript-text-tracking);font-weight:var(--mat-form-field-subscript-text-weight)}.mat-mdc-form-field-focus-overlay{top:0;left:0;right:0;bottom:0;position:absolute;opacity:0;pointer-events:none;background-color:var(--mat-form-field-state-layer-color)}.mat-mdc-text-field-wrapper:hover .mat-mdc-form-field-focus-overlay{opacity:var(--mat-form-field-hover-state-layer-opacity)}.mat-mdc-form-field.mat-focused .mat-mdc-form-field-focus-overlay{opacity:var(--mat-form-field-focus-state-layer-opacity)}select.mat-mdc-form-field-input-control{-moz-appearance:none;-webkit-appearance:none;background-color:rgba(0,0,0,0);display:inline-flex;box-sizing:border-box}select.mat-mdc-form-field-input-control:not(:disabled){cursor:pointer}select.mat-mdc-form-field-input-control:not(.mat-mdc-native-select-inline) option{color:var(--mat-form-field-select-option-text-color)}select.mat-mdc-form-field-input-control:not(.mat-mdc-native-select-inline) option:disabled{color:var(--mat-form-field-select-disabled-option-text-color)}.mat-mdc-form-field-type-mat-native-select .mat-mdc-form-field-infix::after{content:\"\";width:0;height:0;border-left:5px solid rgba(0,0,0,0);border-right:5px solid rgba(0,0,0,0);border-top:5px solid;position:absolute;right:0;top:50%;margin-top:-2.5px;pointer-events:none;color:var(--mat-form-field-enabled-select-arrow-color)}[dir=rtl] .mat-mdc-form-field-type-mat-native-select .mat-mdc-form-field-infix::after{right:auto;left:0}.mat-mdc-form-field-type-mat-native-select.mat-focused .mat-mdc-form-field-infix::after{color:var(--mat-form-field-focus-select-arrow-color)}.mat-mdc-form-field-type-mat-native-select.mat-form-field-disabled .mat-mdc-form-field-infix::after{color:var(--mat-form-field-disabled-select-arrow-color)}.mat-mdc-form-field-type-mat-native-select .mat-mdc-form-field-input-control{padding-right:15px}[dir=rtl] .mat-mdc-form-field-type-mat-native-select .mat-mdc-form-field-input-control{padding-right:0;padding-left:15px}.cdk-high-contrast-active .mat-form-field-appearance-fill .mat-mdc-text-field-wrapper{outline:solid 1px}.cdk-high-contrast-active .mat-form-field-appearance-fill.mat-form-field-disabled .mat-mdc-text-field-wrapper{outline-color:GrayText}.cdk-high-contrast-active .mat-form-field-appearance-fill.mat-focused .mat-mdc-text-field-wrapper{outline:dashed 3px}.cdk-high-contrast-active .mat-mdc-form-field.mat-focused .mdc-notched-outline{border:dashed 3px}.mat-mdc-form-field-input-control[type=date],.mat-mdc-form-field-input-control[type=datetime],.mat-mdc-form-field-input-control[type=datetime-local],.mat-mdc-form-field-input-control[type=month],.mat-mdc-form-field-input-control[type=week],.mat-mdc-form-field-input-control[type=time]{line-height:1}.mat-mdc-form-field-input-control::-webkit-datetime-edit{line-height:1;padding:0;margin-bottom:-2px}.mat-mdc-form-field{--mat-mdc-form-field-floating-label-scale: 0.75;display:inline-flex;flex-direction:column;min-width:0;text-align:left;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:var(--mat-form-field-container-text-font);line-height:var(--mat-form-field-container-text-line-height);font-size:var(--mat-form-field-container-text-size);letter-spacing:var(--mat-form-field-container-text-tracking);font-weight:var(--mat-form-field-container-text-weight)}[dir=rtl] .mat-mdc-form-field{text-align:right}.mat-mdc-form-field .mdc-text-field--outlined .mdc-floating-label--float-above{font-size:calc(var(--mat-form-field-outlined-label-text-populated-size)*var(--mat-mdc-form-field-floating-label-scale))}.mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above{font-size:var(--mat-form-field-outlined-label-text-populated-size)}.mat-mdc-form-field-flex{display:inline-flex;align-items:baseline;box-sizing:border-box;width:100%}.mat-mdc-text-field-wrapper{width:100%}.mat-mdc-form-field-icon-prefix,.mat-mdc-form-field-icon-suffix{align-self:center;line-height:0;pointer-events:auto;position:relative;z-index:1}.mat-mdc-form-field-icon-prefix,[dir=rtl] .mat-mdc-form-field-icon-suffix{padding:0 4px 0 0}.mat-mdc-form-field-icon-suffix,[dir=rtl] .mat-mdc-form-field-icon-prefix{padding:0 0 0 4px}.mat-mdc-form-field-icon-prefix>.mat-icon,.mat-mdc-form-field-icon-suffix>.mat-icon{padding:12px;box-sizing:content-box}.mat-mdc-form-field-subscript-wrapper .mat-icon,.mat-mdc-form-field label .mat-icon{width:1em;height:1em;font-size:inherit}.mat-mdc-form-field-infix{flex:auto;min-width:0;width:180px;position:relative;box-sizing:border-box}.mat-mdc-form-field .mdc-notched-outline__notch{margin-left:-1px;-webkit-clip-path:inset(-9em -999em -9em 1px);clip-path:inset(-9em -999em -9em 1px)}[dir=rtl] .mat-mdc-form-field .mdc-notched-outline__notch{margin-left:0;margin-right:-1px;-webkit-clip-path:inset(-9em 1px -9em -999em);clip-path:inset(-9em 1px -9em -999em)}.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input{transition:opacity 150ms 0ms cubic-bezier(0.4, 0, 0.2, 1)}@media all{.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input::placeholder{transition:opacity 67ms 0ms cubic-bezier(0.4, 0, 0.2, 1)}}@media all{.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input:-ms-input-placeholder{transition:opacity 67ms 0ms cubic-bezier(0.4, 0, 0.2, 1)}}@media all{.mdc-text-field--no-label .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input::placeholder,.mdc-text-field--focused .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input::placeholder{transition-delay:40ms;transition-duration:110ms}}@media all{.mdc-text-field--no-label .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input:-ms-input-placeholder,.mdc-text-field--focused .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input:-ms-input-placeholder{transition-delay:40ms;transition-duration:110ms}}.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__affix{transition:opacity 150ms 0ms cubic-bezier(0.4, 0, 0.2, 1)}.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field--filled.mdc-ripple-upgraded--background-focused .mdc-text-field__ripple::before,.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field--filled:not(.mdc-ripple-upgraded):focus .mdc-text-field__ripple::before{transition-duration:75ms}.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field--outlined .mdc-floating-label--shake{animation:mdc-floating-label-shake-float-above-text-field-outlined 250ms 1}@keyframes mdc-floating-label-shake-float-above-text-field-outlined{0%{transform:translateX(calc(0% - 0%)) translateY(calc(0% - 34.75px)) scale(0.75)}33%{animation-timing-function:cubic-bezier(0.5, 0, 0.701732, 0.495819);transform:translateX(calc(4% - 0%)) translateY(calc(0% - 34.75px)) scale(0.75)}66%{animation-timing-function:cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);transform:translateX(calc(-4% - 0%)) translateY(calc(0% - 34.75px)) scale(0.75)}100%{transform:translateX(calc(0% - 0%)) translateY(calc(0% - 34.75px)) scale(0.75)}}.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field--textarea{transition:none}.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field--textarea.mdc-text-field--filled .mdc-floating-label--shake{animation:mdc-floating-label-shake-float-above-textarea-filled 250ms 1}@keyframes mdc-floating-label-shake-float-above-textarea-filled{0%{transform:translateX(calc(0% - 0%)) translateY(calc(0% - 10.25px)) scale(0.75)}33%{animation-timing-function:cubic-bezier(0.5, 0, 0.701732, 0.495819);transform:translateX(calc(4% - 0%)) translateY(calc(0% - 10.25px)) scale(0.75)}66%{animation-timing-function:cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);transform:translateX(calc(-4% - 0%)) translateY(calc(0% - 10.25px)) scale(0.75)}100%{transform:translateX(calc(0% - 0%)) translateY(calc(0% - 10.25px)) scale(0.75)}}.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field--textarea.mdc-text-field--outlined .mdc-floating-label--shake{animation:mdc-floating-label-shake-float-above-textarea-outlined 250ms 1}@keyframes mdc-floating-label-shake-float-above-textarea-outlined{0%{transform:translateX(calc(0% - 0%)) translateY(calc(0% - 24.75px)) scale(0.75)}33%{animation-timing-function:cubic-bezier(0.5, 0, 0.701732, 0.495819);transform:translateX(calc(4% - 0%)) translateY(calc(0% - 24.75px)) scale(0.75)}66%{animation-timing-function:cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);transform:translateX(calc(-4% - 0%)) translateY(calc(0% - 24.75px)) scale(0.75)}100%{transform:translateX(calc(0% - 0%)) translateY(calc(0% - 24.75px)) scale(0.75)}}.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-floating-label--shake{animation:mdc-floating-label-shake-float-above-text-field-outlined-leading-icon 250ms 1}@keyframes mdc-floating-label-shake-float-above-text-field-outlined-leading-icon{0%{transform:translateX(calc(0% - 32px)) translateY(calc(0% - 34.75px)) scale(0.75)}33%{animation-timing-function:cubic-bezier(0.5, 0, 0.701732, 0.495819);transform:translateX(calc(4% - 32px)) translateY(calc(0% - 34.75px)) scale(0.75)}66%{animation-timing-function:cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);transform:translateX(calc(-4% - 32px)) translateY(calc(0% - 34.75px)) scale(0.75)}100%{transform:translateX(calc(0% - 32px)) translateY(calc(0% - 34.75px)) scale(0.75)}}[dir=rtl] .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field--with-leading-icon.mdc-text-field--outlined .mdc-floating-label--shake,.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field--with-leading-icon.mdc-text-field--outlined[dir=rtl] .mdc-floating-label--shake{animation:mdc-floating-label-shake-float-above-text-field-outlined-leading-icon 250ms 1}@keyframes mdc-floating-label-shake-float-above-text-field-outlined-leading-icon-rtl{0%{transform:translateX(calc(0% - -32px)) translateY(calc(0% - 34.75px)) scale(0.75)}33%{animation-timing-function:cubic-bezier(0.5, 0, 0.701732, 0.495819);transform:translateX(calc(4% - -32px)) translateY(calc(0% - 34.75px)) scale(0.75)}66%{animation-timing-function:cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);transform:translateX(calc(-4% - -32px)) translateY(calc(0% - 34.75px)) scale(0.75)}100%{transform:translateX(calc(0% - -32px)) translateY(calc(0% - 34.75px)) scale(0.75)}}.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-floating-label{transition:transform 150ms cubic-bezier(0.4, 0, 0.2, 1),color 150ms cubic-bezier(0.4, 0, 0.2, 1)}.mdc-floating-label--shake{animation:mdc-floating-label-shake-float-above-standard 250ms 1}@keyframes mdc-floating-label-shake-float-above-standard{0%{transform:translateX(calc(0% - 0%)) translateY(calc(0% - 106%)) scale(0.75)}33%{animation-timing-function:cubic-bezier(0.5, 0, 0.701732, 0.495819);transform:translateX(calc(4% - 0%)) translateY(calc(0% - 106%)) scale(0.75)}66%{animation-timing-function:cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);transform:translateX(calc(-4% - 0%)) translateY(calc(0% - 106%)) scale(0.75)}100%{transform:translateX(calc(0% - 0%)) translateY(calc(0% - 106%)) scale(0.75)}}.mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-line-ripple::after{transition:transform 180ms cubic-bezier(0.4, 0, 0.2, 1),opacity 180ms cubic-bezier(0.4, 0, 0.2, 1)}.mdc-notched-outline .mdc-floating-label{max-width:calc(100% + 1px)}.mdc-notched-outline--upgraded .mdc-floating-label--float-above{max-width:calc(133.3333333333% + 1px)}"] }]
-    }], () => [{ type: i0.ElementRef }, { type: i0.ChangeDetectorRef }, { type: i0.NgZone }, { type: Directionality }, { type: Platform }, { type: undefined, decorators: [{
+    }], () => [{ type: i0.ElementRef }, { type: i0.ChangeDetectorRef }, { type: i0.NgZone }, { type: Directionality }, { type: Platform$1 }, { type: undefined, decorators: [{
                 type: Optional
             }, {
                 type: Inject,
@@ -7192,7 +7678,7 @@ class MatInput {
         return this._disabled;
     }
     set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
+        this._disabled = coerceBooleanProperty$1(value);
         // Browsers may not fire the blur event if the input is disabled too quickly.
         // Reset from here to ensure that the element doesn't become stuck.
         if (this.focused) {
@@ -7218,7 +7704,7 @@ class MatInput {
         return this._required ?? this.ngControl?.control?.hasValidator(Validators.required) ?? false;
     }
     set required(value) {
-        this._required = coerceBooleanProperty(value);
+        this._required = coerceBooleanProperty$1(value);
     }
     /** Input type of the element. */
     get type() {
@@ -7230,7 +7716,7 @@ class MatInput {
         // When using Angular inputs, developers are no longer able to set the properties on the native
         // input element. To ensure that bindings for `type` work, we need to sync the setter
         // with the native property. Textarea elements don't support the type property or attribute.
-        if (!this._isTextarea && getSupportedInputTypes().has(this._type)) {
+        if (!this._isTextarea && getSupportedInputTypes$1().has(this._type)) {
             this._elementRef.nativeElement.type = this._type;
         }
     }
@@ -7259,7 +7745,7 @@ class MatInput {
         return this._readonly;
     }
     set readonly(value) {
-        this._readonly = coerceBooleanProperty(value);
+        this._readonly = coerceBooleanProperty$1(value);
     }
     /** Whether the input is in an error state. */
     get errorState() {
@@ -7308,7 +7794,7 @@ class MatInput {
             'month',
             'time',
             'week',
-        ].filter(t => getSupportedInputTypes().has(t));
+        ].filter(t => getSupportedInputTypes$1().has(t));
         this._iOSKeyupListener = (event) => {
             const el = event.target;
             // Note: We specifically check for 0, rather than `!el.selectionStart`, because the two
@@ -7521,7 +8007,7 @@ class MatInput {
         const element = this._elementRef.nativeElement;
         return this._isNativeSelect && (element.multiple || element.size > 1);
     }
-    static { this.ɵfac = function MatInput_Factory(t) { return new (t || MatInput)(i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(Platform), i0.ɵɵdirectiveInject(i1.NgControl, 10), i0.ɵɵdirectiveInject(i1.NgForm, 8), i0.ɵɵdirectiveInject(i1.FormGroupDirective, 8), i0.ɵɵdirectiveInject(ErrorStateMatcher), i0.ɵɵdirectiveInject(MAT_INPUT_VALUE_ACCESSOR, 10), i0.ɵɵdirectiveInject(AutofillMonitor), i0.ɵɵdirectiveInject(i0.NgZone), i0.ɵɵdirectiveInject(MAT_FORM_FIELD, 8)); }; }
+    static { this.ɵfac = function MatInput_Factory(t) { return new (t || MatInput)(i0.ɵɵdirectiveInject(i0.ElementRef), i0.ɵɵdirectiveInject(Platform$1), i0.ɵɵdirectiveInject(i1.NgControl, 10), i0.ɵɵdirectiveInject(i1.NgForm, 8), i0.ɵɵdirectiveInject(i1.FormGroupDirective, 8), i0.ɵɵdirectiveInject(ErrorStateMatcher), i0.ɵɵdirectiveInject(MAT_INPUT_VALUE_ACCESSOR, 10), i0.ɵɵdirectiveInject(AutofillMonitor), i0.ɵɵdirectiveInject(i0.NgZone), i0.ɵɵdirectiveInject(MAT_FORM_FIELD, 8)); }; }
     static { this.ɵdir = /*@__PURE__*/ i0.ɵɵdefineDirective({ type: MatInput, selectors: [["input", "matInput", ""], ["textarea", "matInput", ""], ["select", "matNativeControl", ""], ["input", "matNativeControl", ""], ["textarea", "matNativeControl", ""]], hostAttrs: [1, "mat-mdc-input-element"], hostVars: 18, hostBindings: function MatInput_HostBindings(rf, ctx) { if (rf & 1) {
             i0.ɵɵlistener("focus", function MatInput_focus_HostBindingHandler() { return ctx._focusChanged(true); })("blur", function MatInput_blur_HostBindingHandler() { return ctx._focusChanged(false); })("input", function MatInput_input_HostBindingHandler() { return ctx._onInput(); });
         } if (rf & 2) {
@@ -7567,7 +8053,7 @@ class MatInput {
                 providers: [{ provide: MatFormFieldControl, useExisting: MatInput }],
                 standalone: true,
             }]
-    }], () => [{ type: i0.ElementRef }, { type: Platform }, { type: i1.NgControl, decorators: [{
+    }], () => [{ type: i0.ElementRef }, { type: Platform$1 }, { type: i1.NgControl, decorators: [{
                 type: Optional
             }, {
                 type: Self
@@ -7638,23 +8124,23 @@ class FileInputErrorStateMatcherExample {
         this.matcher = new MyErrorStateMatcher();
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: FileInputErrorStateMatcherExample, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "17.0.4", type: FileInputErrorStateMatcherExample, isStandalone: true, selector: "file-input-error-state-matcher-example", ngImport: i0, template: "<form class=\"example-form\">\r\n  <mat-form-field class=\"example-full-width\">\r\n    <mat-label>shayan Email</mat-label>\r\n    <input type=\"email\" matInput [formControl]=\"emailFormControl\" [errorStateMatcher]=\"matcher\"\r\n           placeholder=\"Ex. pat@example.com\">\r\n    <mat-hint>shayan Errors appear instantly!</mat-hint>\r\n    @if (emailFormControl.hasError('email') && !emailFormControl.hasError('required')) {\r\n      <mat-error>shayan Please enter a valid email address</mat-error>\r\n    }\r\n    @if (emailFormControl.hasError('required')) {\r\n      <mat-error>shayan Email is <strong>required</strong></mat-error>\r\n    }\r\n  </mat-form-field>\r\n</form>\r\n", styles: [".example-form {\r\n  min-width: 150px;\r\n  max-width: 500px;\r\n  width: 100%;\r\n}\r\n\r\n.example-full-width {\r\n  width: 100%;\r\n}\r\n"], dependencies: [{ kind: "ngmodule", type: FormsModule }, { kind: "directive", type: i1.ɵNgNoValidate, selector: "form:not([ngNoForm]):not([ngNativeValidate])" }, { kind: "directive", type: i1.DefaultValueAccessor, selector: "input:not([type=checkbox])[formControlName],textarea[formControlName],input:not([type=checkbox])[formControl],textarea[formControl],input:not([type=checkbox])[ngModel],textarea[ngModel],[ngDefaultControl]" }, { kind: "directive", type: i1.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { kind: "directive", type: i1.NgControlStatusGroup, selector: "[formGroupName],[formArrayName],[ngModelGroup],[formGroup],form:not([ngNoForm]),[ngForm]" }, { kind: "directive", type: i1.NgForm, selector: "form:not([ngNoForm]):not([formGroup]),ng-form,[ngForm]", inputs: ["ngFormOptions"], outputs: ["ngSubmit"], exportAs: ["ngForm"] }, { kind: "ngmodule", type: MatFormFieldModule }, { kind: "component", type: MatFormField, selector: "mat-form-field", inputs: ["hideRequiredMarker", "color", "floatLabel", "appearance", "subscriptSizing", "hintLabel"], exportAs: ["matFormField"] }, { kind: "directive", type: MatLabel, selector: "mat-label" }, { kind: "directive", type: MatHint, selector: "mat-hint", inputs: ["align", "id"] }, { kind: "directive", type: MatError, selector: "mat-error, [matError]", inputs: ["id"] }, { kind: "ngmodule", type: MatInputModule }, { kind: "directive", type: MatInput, selector: "input[matInput], textarea[matInput], select[matNativeControl],      input[matNativeControl], textarea[matNativeControl]", inputs: ["disabled", "id", "placeholder", "name", "required", "type", "errorStateMatcher", "aria-describedby", "value", "readonly"], exportAs: ["matInput"] }, { kind: "ngmodule", type: ReactiveFormsModule }, { kind: "directive", type: i1.FormControlDirective, selector: "[formControl]", inputs: ["formControl", "disabled", "ngModel"], outputs: ["ngModelChange"], exportAs: ["ngForm"] }] }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "17.0.0", version: "17.0.4", type: FileInputErrorStateMatcherExample, isStandalone: true, selector: "file-input-error-state-matcher-example", ngImport: i0, template: "<form class=\"example-form\">\r\n  <mat-form-field class=\"example-full-width\">\r\n    <mat-label>Email</mat-label>\r\n    <input type=\"email\" matInput [formControl]=\"emailFormControl\" [errorStateMatcher]=\"matcher\"\r\n           placeholder=\"Ex. pat@example.com\">\r\n    <mat-hint>Errors appear instantly!</mat-hint>\r\n    @if (emailFormControl.hasError('email') && !emailFormControl.hasError('required')) {\r\n      <mat-error>Please enter a valid email address</mat-error>\r\n    }\r\n    @if (emailFormControl.hasError('required')) {\r\n      <mat-error>Email is <strong>required</strong></mat-error>\r\n    }\r\n  </mat-form-field>\r\n</form>\r\n", styles: [".example-form {\r\n  min-width: 150px;\r\n  max-width: 500px;\r\n  width: 100%;\r\n}\r\n\r\n.example-full-width {\r\n  width: 100%;\r\n}\r\n"], dependencies: [{ kind: "ngmodule", type: FormsModule }, { kind: "directive", type: i1.ɵNgNoValidate, selector: "form:not([ngNoForm]):not([ngNativeValidate])" }, { kind: "directive", type: i1.DefaultValueAccessor, selector: "input:not([type=checkbox])[formControlName],textarea[formControlName],input:not([type=checkbox])[formControl],textarea[formControl],input:not([type=checkbox])[ngModel],textarea[ngModel],[ngDefaultControl]" }, { kind: "directive", type: i1.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { kind: "directive", type: i1.NgControlStatusGroup, selector: "[formGroupName],[formArrayName],[ngModelGroup],[formGroup],form:not([ngNoForm]),[ngForm]" }, { kind: "directive", type: i1.NgForm, selector: "form:not([ngNoForm]):not([formGroup]),ng-form,[ngForm]", inputs: ["ngFormOptions"], outputs: ["ngSubmit"], exportAs: ["ngForm"] }, { kind: "ngmodule", type: MatFormFieldModule }, { kind: "component", type: MatFormField, selector: "mat-form-field", inputs: ["hideRequiredMarker", "color", "floatLabel", "appearance", "subscriptSizing", "hintLabel"], exportAs: ["matFormField"] }, { kind: "directive", type: MatLabel, selector: "mat-label" }, { kind: "directive", type: MatHint, selector: "mat-hint", inputs: ["align", "id"] }, { kind: "directive", type: MatError, selector: "mat-error, [matError]", inputs: ["id"] }, { kind: "ngmodule", type: MatInputModule }, { kind: "directive", type: MatInput, selector: "input[matInput], textarea[matInput], select[matNativeControl],      input[matNativeControl], textarea[matNativeControl]", inputs: ["disabled", "id", "placeholder", "name", "required", "type", "errorStateMatcher", "aria-describedby", "value", "readonly"], exportAs: ["matInput"] }, { kind: "ngmodule", type: ReactiveFormsModule }, { kind: "directive", type: i1.FormControlDirective, selector: "[formControl]", inputs: ["formControl", "disabled", "ngModel"], outputs: ["ngModelChange"], exportAs: ["ngForm"] }] }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: FileInputErrorStateMatcherExample, decorators: [{
             type: Component,
-            args: [{ selector: 'file-input-error-state-matcher-example', standalone: true, imports: [FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule], template: "<form class=\"example-form\">\r\n  <mat-form-field class=\"example-full-width\">\r\n    <mat-label>shayan Email</mat-label>\r\n    <input type=\"email\" matInput [formControl]=\"emailFormControl\" [errorStateMatcher]=\"matcher\"\r\n           placeholder=\"Ex. pat@example.com\">\r\n    <mat-hint>shayan Errors appear instantly!</mat-hint>\r\n    @if (emailFormControl.hasError('email') && !emailFormControl.hasError('required')) {\r\n      <mat-error>shayan Please enter a valid email address</mat-error>\r\n    }\r\n    @if (emailFormControl.hasError('required')) {\r\n      <mat-error>shayan Email is <strong>required</strong></mat-error>\r\n    }\r\n  </mat-form-field>\r\n</form>\r\n", styles: [".example-form {\r\n  min-width: 150px;\r\n  max-width: 500px;\r\n  width: 100%;\r\n}\r\n\r\n.example-full-width {\r\n  width: 100%;\r\n}\r\n"] }]
+            args: [{ selector: 'file-input-error-state-matcher-example', standalone: true, imports: [FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule], template: "<form class=\"example-form\">\r\n  <mat-form-field class=\"example-full-width\">\r\n    <mat-label>Email</mat-label>\r\n    <input type=\"email\" matInput [formControl]=\"emailFormControl\" [errorStateMatcher]=\"matcher\"\r\n           placeholder=\"Ex. pat@example.com\">\r\n    <mat-hint>Errors appear instantly!</mat-hint>\r\n    @if (emailFormControl.hasError('email') && !emailFormControl.hasError('required')) {\r\n      <mat-error>Please enter a valid email address</mat-error>\r\n    }\r\n    @if (emailFormControl.hasError('required')) {\r\n      <mat-error>Email is <strong>required</strong></mat-error>\r\n    }\r\n  </mat-form-field>\r\n</form>\r\n", styles: [".example-form {\r\n  min-width: 150px;\r\n  max-width: 500px;\r\n  width: 100%;\r\n}\r\n\r\n.example-full-width {\r\n  width: 100%;\r\n}\r\n"] }]
         }] });
 
 /**
- * @title Basic File Inputs
+ * @title Basic File Input
  */
 class FileInputOverviewExample {
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: FileInputOverviewExample, deps: [], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.0.4", type: FileInputOverviewExample, isStandalone: true, selector: "file-input-overview-example", ngImport: i0, template: "<form class=\"example-form\">\r\n  <mat-form-field class=\"example-full-width\">\r\n    <mat-label>shayan Favorite food</mat-label>\r\n    <input matInput placeholder=\"Ex. Pizza\" value=\"Sushi\">\r\n  </mat-form-field>\r\n\r\n  <mat-form-field class=\"example-full-width\">\r\n    <mat-label>shayan Leave a comment</mat-label>\r\n    <textarea matInput placeholder=\"It makes me feel...\"></textarea>\r\n  </mat-form-field>\r\n</form>\r\n", styles: [".example-form {\r\n  min-width: 150px;\r\n  max-width: 500px;\r\n  width: 100%;\r\n}\r\n\r\n.example-full-width {\r\n  width: 100%;\r\n}\r\n"], dependencies: [{ kind: "ngmodule", type: FormsModule }, { kind: "directive", type: i1.ɵNgNoValidate, selector: "form:not([ngNoForm]):not([ngNativeValidate])" }, { kind: "directive", type: i1.NgControlStatusGroup, selector: "[formGroupName],[formArrayName],[ngModelGroup],[formGroup],form:not([ngNoForm]),[ngForm]" }, { kind: "directive", type: i1.NgForm, selector: "form:not([ngNoForm]):not([formGroup]),ng-form,[ngForm]", inputs: ["ngFormOptions"], outputs: ["ngSubmit"], exportAs: ["ngForm"] }, { kind: "ngmodule", type: MatFormFieldModule }, { kind: "component", type: MatFormField, selector: "mat-form-field", inputs: ["hideRequiredMarker", "color", "floatLabel", "appearance", "subscriptSizing", "hintLabel"], exportAs: ["matFormField"] }, { kind: "directive", type: MatLabel, selector: "mat-label" }, { kind: "ngmodule", type: MatInputModule }, { kind: "directive", type: MatInput, selector: "input[matInput], textarea[matInput], select[matNativeControl],      input[matNativeControl], textarea[matNativeControl]", inputs: ["disabled", "id", "placeholder", "name", "required", "type", "errorStateMatcher", "aria-describedby", "value", "readonly"], exportAs: ["matInput"] }] }); }
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.0.4", type: FileInputOverviewExample, isStandalone: true, selector: "file-input-overview-example", ngImport: i0, template: "<form class=\"example-form\">\r\n  <mat-form-field class=\"example-full-width\">\r\n    <mat-label>Favorite food</mat-label>\r\n    <input matInput placeholder=\"Ex. Pizza\" value=\"Sushi\">\r\n  </mat-form-field>\r\n\r\n  <mat-form-field class=\"example-full-width\">\r\n    <mat-label>Leave a comment</mat-label>\r\n    <textarea matInput placeholder=\"Ex. It makes me feel...\"></textarea>\r\n  </mat-form-field>\r\n</form>\r\n", styles: [".example-form {\r\n  min-width: 150px;\r\n  max-width: 500px;\r\n  width: 100%;\r\n}\r\n\r\n.example-full-width {\r\n  width: 100%;\r\n}\r\n"], dependencies: [{ kind: "ngmodule", type: FormsModule }, { kind: "directive", type: i1.ɵNgNoValidate, selector: "form:not([ngNoForm]):not([ngNativeValidate])" }, { kind: "directive", type: i1.NgControlStatusGroup, selector: "[formGroupName],[formArrayName],[ngModelGroup],[formGroup],form:not([ngNoForm]),[ngForm]" }, { kind: "directive", type: i1.NgForm, selector: "form:not([ngNoForm]):not([formGroup]),ng-form,[ngForm]", inputs: ["ngFormOptions"], outputs: ["ngSubmit"], exportAs: ["ngForm"] }, { kind: "ngmodule", type: MatFormFieldModule }, { kind: "component", type: MatFormField, selector: "mat-form-field", inputs: ["hideRequiredMarker", "color", "floatLabel", "appearance", "subscriptSizing", "hintLabel"], exportAs: ["matFormField"] }, { kind: "directive", type: MatLabel, selector: "mat-label" }, { kind: "ngmodule", type: MatInputModule }, { kind: "directive", type: MatInput, selector: "input[matInput], textarea[matInput], select[matNativeControl],      input[matNativeControl], textarea[matNativeControl]", inputs: ["disabled", "id", "placeholder", "name", "required", "type", "errorStateMatcher", "aria-describedby", "value", "readonly"], exportAs: ["matInput"] }] }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.4", ngImport: i0, type: FileInputOverviewExample, decorators: [{
             type: Component,
-            args: [{ selector: 'file-input-overview-example', standalone: true, imports: [FormsModule, MatFormFieldModule, MatInputModule], template: "<form class=\"example-form\">\r\n  <mat-form-field class=\"example-full-width\">\r\n    <mat-label>shayan Favorite food</mat-label>\r\n    <input matInput placeholder=\"Ex. Pizza\" value=\"Sushi\">\r\n  </mat-form-field>\r\n\r\n  <mat-form-field class=\"example-full-width\">\r\n    <mat-label>shayan Leave a comment</mat-label>\r\n    <textarea matInput placeholder=\"It makes me feel...\"></textarea>\r\n  </mat-form-field>\r\n</form>\r\n", styles: [".example-form {\r\n  min-width: 150px;\r\n  max-width: 500px;\r\n  width: 100%;\r\n}\r\n\r\n.example-full-width {\r\n  width: 100%;\r\n}\r\n"] }]
+            args: [{ selector: 'file-input-overview-example', standalone: true, imports: [FormsModule, MatFormFieldModule, MatInputModule], template: "<form class=\"example-form\">\r\n  <mat-form-field class=\"example-full-width\">\r\n    <mat-label>Favorite food</mat-label>\r\n    <input matInput placeholder=\"Ex. Pizza\" value=\"Sushi\">\r\n  </mat-form-field>\r\n\r\n  <mat-form-field class=\"example-full-width\">\r\n    <mat-label>Leave a comment</mat-label>\r\n    <textarea matInput placeholder=\"Ex. It makes me feel...\"></textarea>\r\n  </mat-form-field>\r\n</form>\r\n", styles: [".example-form {\r\n  min-width: 150px;\r\n  max-width: 500px;\r\n  width: 100%;\r\n}\r\n\r\n.example-full-width {\r\n  width: 100%;\r\n}\r\n"] }]
         }] });
 
 /**
