@@ -4,137 +4,41 @@
  ******************************************************************************
  */
 const EXAMPLE_COMPONENTS = {
-    "input-clearable": {
-        "packagePath": "material/input/input-clearable",
-        "title": "Input with a clear button",
-        "componentName": "InputClearableExample",
+    "file-input-error-state-matcher": {
+        "packagePath": "material/file-input/file-input-error-state-matcher",
+        "title": "File Input with a custom ErrorStateMatcher",
+        "componentName": "FileInputErrorStateMatcherExample",
         "files": [
-            "input-clearable-example.ts",
-            "./input-clearable-example.html",
-            "./input-clearable-example.css"
+            "file-input-error-state-matcher-example.ts",
+            "./file-input-error-state-matcher-example.html",
+            "./file-input-error-state-matcher-example.css"
         ],
-        "selector": "input-clearable-example",
+        "selector": "file-input-error-state-matcher-example",
         "additionalComponents": [],
-        "primaryFile": "input-clearable-example.ts",
-        "importPath": "material/input"
+        "primaryFile": "file-input-error-state-matcher-example.ts",
+        "importPath": "material/file-input"
     },
-    "input-error-state-matcher": {
-        "packagePath": "material/input/input-error-state-matcher",
-        "title": "Input with a custom ErrorStateMatcher",
-        "componentName": "InputErrorStateMatcherExample",
+    "file-input-overview": {
+        "packagePath": "material/file-input/file-input-overview",
+        "title": "Basic File Input",
+        "componentName": "FileInputOverviewExample",
         "files": [
-            "input-error-state-matcher-example.ts",
-            "./input-error-state-matcher-example.html",
-            "./input-error-state-matcher-example.css"
+            "file-input-overview-example.ts",
+            "file-input-overview-example.html",
+            "file-input-overview-example.css"
         ],
-        "selector": "input-error-state-matcher-example",
+        "selector": "file-input-overview-example",
         "additionalComponents": [],
-        "primaryFile": "input-error-state-matcher-example.ts",
-        "importPath": "material/input"
-    },
-    "input-errors": {
-        "packagePath": "material/input/input-errors",
-        "title": "Input with error messages",
-        "componentName": "InputErrorsExample",
-        "files": [
-            "input-errors-example.ts",
-            "input-errors-example.html",
-            "input-errors-example.css"
-        ],
-        "selector": "input-errors-example",
-        "additionalComponents": [],
-        "primaryFile": "input-errors-example.ts",
-        "importPath": "material/input"
-    },
-    "input-form": {
-        "packagePath": "material/input/input-form",
-        "title": "Inputs in a form",
-        "componentName": "InputFormExample",
-        "files": [
-            "input-form-example.ts",
-            "input-form-example.html",
-            "input-form-example.css"
-        ],
-        "selector": "input-form-example",
-        "additionalComponents": [],
-        "primaryFile": "input-form-example.ts",
-        "importPath": "material/input"
-    },
-    "input-harness": {
-        "packagePath": "material/input/input-harness",
-        "title": "Testing with MatInputHarness",
-        "componentName": "InputHarnessExample",
-        "files": [
-            "input-harness-example.ts",
-            "input-harness-example.html",
-            "input-harness-example.spec.ts"
-        ],
-        "selector": "input-harness-example",
-        "additionalComponents": [],
-        "primaryFile": "input-harness-example.ts",
-        "importPath": "material/input"
-    },
-    "input-hint": {
-        "packagePath": "material/input/input-hint",
-        "title": "Input with hints",
-        "componentName": "InputHintExample",
-        "files": [
-            "input-hint-example.ts",
-            "input-hint-example.html",
-            "input-hint-example.css"
-        ],
-        "selector": "input-hint-example",
-        "additionalComponents": [],
-        "primaryFile": "input-hint-example.ts",
-        "importPath": "material/input"
-    },
-    "input-overview": {
-        "packagePath": "material/input/input-overview",
-        "title": "Basic Inputs",
-        "componentName": "InputOverviewExample",
-        "files": [
-            "input-overview-example.ts",
-            "input-overview-example.html",
-            "input-overview-example.css"
-        ],
-        "selector": "input-overview-example",
-        "additionalComponents": [],
-        "primaryFile": "input-overview-example.ts",
-        "importPath": "material/input"
-    },
-    "input-prefix-suffix": {
-        "packagePath": "material/input/input-prefix-suffix",
-        "title": "Inputs with prefixes and suffixes",
-        "componentName": "InputPrefixSuffixExample",
-        "files": [
-            "input-prefix-suffix-example.ts",
-            "input-prefix-suffix-example.html",
-            "input-prefix-suffix-example.css"
-        ],
-        "selector": "input-prefix-suffix-example",
-        "additionalComponents": [],
-        "primaryFile": "input-prefix-suffix-example.ts",
-        "importPath": "material/input"
+        "primaryFile": "file-input-overview-example.ts",
+        "importPath": "material/file-input"
     }
 };
 async function loadExample(id) {
     switch (id) {
-        case 'input-clearable':
-            return import('@angular/shayan-documents/material/input');
-        case 'input-error-state-matcher':
-            return import('@angular/shayan-documents/material/input');
-        case 'input-errors':
-            return import('@angular/shayan-documents/material/input');
-        case 'input-form':
-            return import('@angular/shayan-documents/material/input');
-        case 'input-harness':
-            return import('@angular/shayan-documents/material/input');
-        case 'input-hint':
-            return import('@angular/shayan-documents/material/input');
-        case 'input-overview':
-            return import('@angular/shayan-documents/material/input');
-        case 'input-prefix-suffix':
-            return import('@angular/shayan-documents/material/input');
+        case 'file-input-error-state-matcher':
+            return import('@angular/shayan-documents/material/file-input');
+        case 'file-input-overview':
+            return import('@angular/shayan-documents/material/file-input');
         default:
             return undefined;
     }
