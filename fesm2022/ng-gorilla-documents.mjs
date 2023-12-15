@@ -5,7 +5,7 @@
  */
 const EXAMPLE_COMPONENTS = {
     "file-input-error-state-matcher": {
-        "packagePath": "material/file-input/file-input-error-state-matcher",
+        "packagePath": "ng-gorilla/file-input/file-input-error-state-matcher",
         "title": "File Input with a custom ErrorStateMatcher",
         "componentName": "FileInputErrorStateMatcherExample",
         "files": [
@@ -16,10 +16,10 @@ const EXAMPLE_COMPONENTS = {
         "selector": "file-input-error-state-matcher-example",
         "additionalComponents": [],
         "primaryFile": "file-input-error-state-matcher-example.ts",
-        "importPath": "material/file-input"
+        "importPath": "ng-gorilla/file-input"
     },
     "file-input-overview": {
-        "packagePath": "material/file-input/file-input-overview",
+        "packagePath": "ng-gorilla/file-input/file-input-overview",
         "title": "Basic File Input",
         "componentName": "FileInputOverviewExample",
         "files": [
@@ -30,15 +30,15 @@ const EXAMPLE_COMPONENTS = {
         "selector": "file-input-overview-example",
         "additionalComponents": [],
         "primaryFile": "file-input-overview-example.ts",
-        "importPath": "material/file-input"
+        "importPath": "ng-gorilla/file-input"
     }
 };
 async function loadExample(id) {
     switch (id) {
         case 'file-input-error-state-matcher':
-            return import('@angular/ng-gorilla-documents/material/file-input');
+            return import('@angular/ng-gorilla-documents/ng-gorilla/file-input');
         case 'file-input-overview':
-            return import('@angular/ng-gorilla-documents/material/file-input');
+            return import('@angular/ng-gorilla-documents/ng-gorilla/file-input');
         default:
             return undefined;
     }

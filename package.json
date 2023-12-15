@@ -1,6 +1,6 @@
 {
   "name": "@angular/ng-gorilla-documents",
-  "version": "17.0.0",
+  "version": "1.0.0",
   "description": "Angular Components Examples",
   "private": true,
   "repository": {
@@ -28,11 +28,11 @@
       "esm": "./esm2022/ng-gorilla-documents_public_index.mjs",
       "default": "./fesm2022/ng-gorilla-documents.mjs"
     },
-    "./material/file-input": {
-      "types": "./material/file-input/index.d.ts",
-      "esm2022": "./esm2022/material/file-input/file-input_public_index.mjs",
-      "esm": "./esm2022/material/file-input/file-input_public_index.mjs",
-      "default": "./fesm2022/material/file-input.mjs"
+    "./ng-gorilla/file-input": {
+      "types": "./ng-gorilla/file-input/index.d.ts",
+      "esm2022": "./esm2022/ng-gorilla/file-input/file-input_public_index.mjs",
+      "esm": "./esm2022/ng-gorilla/file-input/file-input_public_index.mjs",
+      "default": "./fesm2022/ng-gorilla/file-input.mjs"
     }
   },
   "license": "MIT",
