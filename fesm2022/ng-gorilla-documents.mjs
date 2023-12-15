@@ -36,9 +36,9 @@ const EXAMPLE_COMPONENTS = {
 async function loadExample(id) {
     switch (id) {
         case 'file-input-error-state-matcher':
-            return import('@angular/shayan-documents/material/file-input');
+            return import('@angular/ng-gorilla-documents/material/file-input');
         case 'file-input-overview':
-            return import('@angular/shayan-documents/material/file-input');
+            return import('@angular/ng-gorilla-documents/material/file-input');
         default:
             return undefined;
     }
@@ -69,4 +69,4 @@ class ExampleData {
  */
 
 export { EXAMPLE_COMPONENTS, ExampleData, loadExample };
-//# sourceMappingURL=shayan-documents.mjs.map
+//# sourceMappingURL=ng-gorilla-documents.mjs.map

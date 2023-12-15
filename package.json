@@ -1,14 +1,16 @@
 {
-  "name": "@angular/shayan-documents",
+  "name": "@angular/ng-gorilla-documents",
   "version": "17.0.0",
   "description": "Angular Components Examples",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/shayan-ghzl/shayan-documents.git"
+    "url": "https://github.com/shayan-ghzl/ng-gorilla-documents.git"
   },
   "keywords": [
     "angular",
+    "gorilla",
+    "ng-gorilla",
     "material",
     "material design",
     "components"
@@ -22,9 +24,9 @@
     },
     ".": {
       "types": "./index.d.ts",
-      "esm2022": "./esm2022/shayan-documents_public_index.mjs",
-      "esm": "./esm2022/shayan-documents_public_index.mjs",
-      "default": "./fesm2022/shayan-documents.mjs"
+      "esm2022": "./esm2022/ng-gorilla-documents_public_index.mjs",
+      "esm": "./esm2022/ng-gorilla-documents_public_index.mjs",
+      "default": "./fesm2022/ng-gorilla-documents.mjs"
     },
     "./material/file-input": {
       "types": "./material/file-input/index.d.ts",
@@ -35,9 +37,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shayan-ghzl/shayan-documents/issues"
+    "url": "https://github.com/shayan-ghzl/ng-gorilla-documents/issues"
   },
-  "homepage": "https://github.com/shayan-ghzl/shayan-documents#readme",
+  "homepage": "https://github.com/shayan-ghzl/ng-gorilla-documents#readme",
   "peerDependencies": {
     "@angular/cdk": "^17.0.1",
     "@angular/common": "^17.0.0",
@@ -52,7 +54,7 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "module": "./fesm2022/shayan-documents.mjs",
+  "module": "./fesm2022/ng-gorilla-documents.mjs",
   "typings": "./index.d.ts",
   "type": "module"
 }
