@@ -45,11 +45,12 @@
     "@angular/common": "^17.0.0",
     "@angular/core": "^17.0.0",
     "@angular/material": "^17.0.1",
-    "@angular/cdk-experimental": "^17.0.0",
-    "@angular/material-experimental": "^17.0.0",
-    "@angular/material-moment-adapter": "^17.0.0",
-    "@angular/material-luxon-adapter": "^17.0.0",
-    "@angular/material-date-fns-adapter": "^17.0.0"
+    "ng-gorilla": "^1.0.0",
+    "@angular/cdk-experimental": "^17.0.1",
+    "@angular/material-experimental": "^17.0.1",
+    "@angular/material-moment-adapter": "^17.0.1",
+    "@angular/material-luxon-adapter": "^17.0.1",
+    "@angular/material-date-fns-adapter": "^17.0.1"
   },
   "dependencies": {
     "tslib": "^2.3.0"

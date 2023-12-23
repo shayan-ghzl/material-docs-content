@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {FormsModule} from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { GrlFileInputModule } from '@angular/ng-gorilla/file-input';
 
 /**
  * @title Basic File Input
@@ -11,6 +11,6 @@ import {FormsModule} from '@angular/forms';
   styleUrls: ['file-input-overview-example.css'],
   templateUrl: 'file-input-overview-example.html',
   standalone: true,
-  imports: [FormsModule, MatFormFieldModule, MatInputModule],
+  imports: [FormsModule, MatFormFieldModule, GrlFileInputModule],
 })
 export class FileInputOverviewExample {}

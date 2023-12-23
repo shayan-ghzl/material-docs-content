@@ -1,11 +1,9 @@
 <form class="example-form">
-  <mat-form-field class="example-full-width">
-    <mat-label>Favorite food</mat-label>
-    <input matInput placeholder="Ex. Pizza" value="shayan ghazali">
-  </mat-form-field>
-
-  <mat-form-field class="example-full-width">
-    <mat-label>Leave a comment</mat-label>
-    <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Upload Documents</mat-label>
+    <grl-file-input #fileInput [multiple]="true" placeholder="Upload your pictures"></grl-file-input>
+    <button type="button" matSuffix mat-flat-button color="primary" [grlFileInputButtonFor]="fileInput">Add</button>
+    <mat-hint>This is a hint</mat-hint>
+    <mat-error>This is an error</mat-error>
   </mat-form-field>
 </form>
