@@ -6,8 +6,8 @@ import * as i2 from '@angular/material/form-field';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import * as i3 from '@angular/material/input';
 import { MatInputModule } from '@angular/material/input';
-import * as i3$1 from '@angular/ng-gorilla/file-input';
-import { GrlFileInputModule } from '@angular/ng-gorilla/file-input';
+import * as i3$1 from 'ng-gorilla/file-input';
+import { GrlFileInputModule } from 'ng-gorilla/file-input';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 class MyErrorStateMatcher {

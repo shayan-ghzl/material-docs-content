@@ -45,6 +45,7 @@
     "@angular/common": "^17.0.0",
     "@angular/core": "^17.0.0",
     "@angular/material": "^17.0.1",
+    "ng-gorilla": "^1.0.1",
     "@angular/cdk-experimental": "^17.0.1",
     "@angular/material-experimental": "^17.0.1",
     "@angular/material-moment-adapter": "^17.0.1",
