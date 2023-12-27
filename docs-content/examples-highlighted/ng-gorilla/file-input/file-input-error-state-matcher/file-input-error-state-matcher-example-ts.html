@@ -1,4 +1,4 @@
-<span class="hljs-keyword">import</span> { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
+<span class="hljs-keyword">import</span> { Component, ViewEncapsulation } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
 <span class="hljs-keyword">import</span> {
   FormControl,
   FormGroupDirective,
@@ -6,6 +6,7 @@
   ReactiveFormsModule,
   Validators
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/forms&#x27;</span>;
+<span class="hljs-keyword">import</span> { MatButtonModule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/material/button&#x27;</span>;
 <span class="hljs-keyword">import</span> { ErrorStateMatcher } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/material/core&#x27;</span>;
 <span class="hljs-keyword">import</span> { MatFormFieldModule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/material/form-field&#x27;</span>;
 <span class="hljs-keyword">import</span> { FileValidator, GrlFileInputModule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;ng-gorilla/file-input&#x27;</span>;
@@ -24,7 +25,8 @@
   <span class="hljs-attr">templateUrl</span>: <span class="hljs-string">&#x27;./file-input-error-state-matcher-example.html&#x27;</span>,
   <span class="hljs-attr">styleUrls</span>: [<span class="hljs-string">&#x27;./file-input-error-state-matcher-example.css&#x27;</span>],
   <span class="hljs-attr">standalone</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">imports</span>: [MatFormFieldModule, ReactiveFormsModule, GrlFileInputModule],
+  <span class="hljs-attr">imports</span>: [MatFormFieldModule, ReactiveFormsModule, GrlFileInputModule, MatButtonModule],
+  <span class="hljs-attr">encapsulation</span>: ViewEncapsulation.None
 })
 <span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FileInputErrorStateMatcherExample</span> </span>{
 

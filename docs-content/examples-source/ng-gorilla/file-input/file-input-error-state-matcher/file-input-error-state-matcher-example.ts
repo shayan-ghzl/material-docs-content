@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import {
   FormControl,
   FormGroupDirective,
@@ -6,6 +6,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FileValidator, GrlFileInputModule } from 'ng-gorilla/file-input';
@@ -24,7 +25,8 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './file-input-error-state-matcher-example.html',
   styleUrls: ['./file-input-error-state-matcher-example.css'],
   standalone: true,
-  imports: [MatFormFieldModule, ReactiveFormsModule, GrlFileInputModule],
+  imports: [MatFormFieldModule, ReactiveFormsModule, GrlFileInputModule, MatButtonModule],
+  encapsulation: ViewEncapsulation.None
 })
 export class FileInputErrorStateMatcherExample {
 
