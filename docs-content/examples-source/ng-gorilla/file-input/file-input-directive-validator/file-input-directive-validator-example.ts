@@ -5,16 +5,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { GrlFileInputModule } from 'ng-gorilla/file-input';
 
 /**
- * @title Basic File Input
+ * @title File Input with a directive validator
  */
 @Component({
-  selector: 'file-input-overview-example',
-  styleUrls: ['file-input-overview-example.css'],
-  templateUrl: 'file-input-overview-example.html',
+  selector: 'file-input-directive-validator-example',
+  styleUrls: ['file-input-directive-validator-example.css'],
+  templateUrl: 'file-input-directive-validator-example.html',
   standalone: true,
   imports: [ReactiveFormsModule, MatFormFieldModule, GrlFileInputModule, MatButtonModule],
 })
-export class FileInputOverviewExample {
+export class FileInputDirectiveValidatorExample {
 
   fileFormControl = new FormControl([], [Validators.required]);
 

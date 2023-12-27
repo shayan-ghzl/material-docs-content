@@ -1,15 +1,14 @@
-<span class="hljs-keyword">import</span> {Component} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
+<span class="hljs-keyword">import</span> { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
 <span class="hljs-keyword">import</span> {
   FormControl,
   FormGroupDirective,
-  FormsModule,
   NgForm,
   ReactiveFormsModule,
-  Validators,
+  Validators
 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/forms&#x27;</span>;
-<span class="hljs-keyword">import</span> {ErrorStateMatcher} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/material/core&#x27;</span>;
-<span class="hljs-keyword">import</span> {MatFormFieldModule} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/material/form-field&#x27;</span>;
-<span class="hljs-keyword">import</span> {MatInputModule} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/material/input&#x27;</span>;
+<span class="hljs-keyword">import</span> { ErrorStateMatcher } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/material/core&#x27;</span>;
+<span class="hljs-keyword">import</span> { MatFormFieldModule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/material/form-field&#x27;</span>;
+<span class="hljs-keyword">import</span> { FileValidator, GrlFileInputModule } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;ng-gorilla/file-input&#x27;</span>;
 
 <span class="hljs-comment">/** Error when invalid control is dirty, touched, or submitted. */</span>
 <span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyErrorStateMatcher</span> <span class="hljs-title">implements</span> <span class="hljs-title">ErrorStateMatcher</span> </span>{
@@ -25,10 +24,11 @@
   <span class="hljs-attr">templateUrl</span>: <span class="hljs-string">&#x27;./file-input-error-state-matcher-example.html&#x27;</span>,
   <span class="hljs-attr">styleUrls</span>: [<span class="hljs-string">&#x27;./file-input-error-state-matcher-example.css&#x27;</span>],
   <span class="hljs-attr">standalone</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">imports</span>: [FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+  <span class="hljs-attr">imports</span>: [MatFormFieldModule, ReactiveFormsModule, GrlFileInputModule],
 })
 <span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FileInputErrorStateMatcherExample</span> </span>{
-  emailFormControl = <span class="hljs-keyword">new</span> FormControl(<span class="hljs-string">&#x27;&#x27;</span>, [Validators.required, Validators.email]);
+
+ fileFormControl = <span class="hljs-keyword">new</span> FormControl([], [Validators.required, FileValidator.maxContentSize(<span class="hljs-number">1048576</span>)]);
 
   matcher = <span class="hljs-keyword">new</span> MyErrorStateMatcher();
 }

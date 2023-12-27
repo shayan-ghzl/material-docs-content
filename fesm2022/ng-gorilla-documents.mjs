@@ -4,6 +4,34 @@
  ******************************************************************************
  */
 const EXAMPLE_COMPONENTS = {
+    "file-input-clear-button": {
+        "packagePath": "ng-gorilla/file-input/file-input-clear-button",
+        "title": "File Input with a clear button",
+        "componentName": "FileInputClearButtonExample",
+        "files": [
+            "file-input-clear-button-example.ts",
+            "file-input-clear-button-example.html",
+            "file-input-clear-button-example.css"
+        ],
+        "selector": "file-input-clear-button-example",
+        "additionalComponents": [],
+        "primaryFile": "file-input-clear-button-example.ts",
+        "importPath": "ng-gorilla/file-input"
+    },
+    "file-input-directive-validator": {
+        "packagePath": "ng-gorilla/file-input/file-input-directive-validator",
+        "title": "File Input with a directive validator",
+        "componentName": "FileInputDirectiveValidatorExample",
+        "files": [
+            "file-input-directive-validator-example.ts",
+            "file-input-directive-validator-example.html",
+            "file-input-directive-validator-example.css"
+        ],
+        "selector": "file-input-directive-validator-example",
+        "additionalComponents": [],
+        "primaryFile": "file-input-directive-validator-example.ts",
+        "importPath": "ng-gorilla/file-input"
+    },
     "file-input-error-state-matcher": {
         "packagePath": "ng-gorilla/file-input/file-input-error-state-matcher",
         "title": "File Input with a custom ErrorStateMatcher",
@@ -31,13 +59,49 @@ const EXAMPLE_COMPONENTS = {
         "additionalComponents": [],
         "primaryFile": "file-input-overview-example.ts",
         "importPath": "ng-gorilla/file-input"
+    },
+    "file-input-single": {
+        "packagePath": "ng-gorilla/file-input/file-input-single",
+        "title": "File Input with just a single file upload capability",
+        "componentName": "FileInputSingleExample",
+        "files": [
+            "file-input-single-example.ts",
+            "file-input-single-example.html",
+            "file-input-single-example.css"
+        ],
+        "selector": "file-input-single-example",
+        "additionalComponents": [],
+        "primaryFile": "file-input-single-example.ts",
+        "importPath": "ng-gorilla/file-input"
+    },
+    "file-input-upload-button-outside": {
+        "packagePath": "ng-gorilla/file-input/file-input-upload-button-outside",
+        "title": "File Input with upload button outside of it",
+        "componentName": "FileInputUploadButtonOutsideExample",
+        "files": [
+            "file-input-upload-button-outside-example.ts",
+            "file-input-upload-button-outside-example.html",
+            "file-input-upload-button-outside-example.css"
+        ],
+        "selector": "file-input-upload-button-outside-example",
+        "additionalComponents": [],
+        "primaryFile": "file-input-upload-button-outside-example.ts",
+        "importPath": "ng-gorilla/file-input"
     }
 };
 async function loadExample(id) {
     switch (id) {
+        case 'file-input-clear-button':
+            return import('@angular/ng-gorilla-documents/ng-gorilla/file-input');
+        case 'file-input-directive-validator':
+            return import('@angular/ng-gorilla-documents/ng-gorilla/file-input');
         case 'file-input-error-state-matcher':
             return import('@angular/ng-gorilla-documents/ng-gorilla/file-input');
         case 'file-input-overview':
+            return import('@angular/ng-gorilla-documents/ng-gorilla/file-input');
+        case 'file-input-single':
+            return import('@angular/ng-gorilla-documents/ng-gorilla/file-input');
+        case 'file-input-upload-button-outside':
             return import('@angular/ng-gorilla-documents/ng-gorilla/file-input');
         default:
             return undefined;
